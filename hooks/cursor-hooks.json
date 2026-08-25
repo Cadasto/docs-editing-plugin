@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "bash hooks/session-start.sh"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "bash hooks/prose-lint-on-save.sh"
+      }
+    ]
+  }
+}
