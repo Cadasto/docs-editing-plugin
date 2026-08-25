@@ -8,7 +8,7 @@ The **Docs Editing Plugin** (`docs-editing`) is an AI plugin by Cadasto B.V. tha
 
 It is **general-purpose and stack-agnostic** by design: the components operate on prose (`*.md`, page copy, site metadata, `llms.txt`) and on the target repository's own conventions, so the same skills serve an MkDocs site, a Docusaurus site, and a plain `docs/` tree unchanged.
 
-> **Current status — v0.1.0.** First build. Shipped and validating clean (`./scripts/validate.sh` + `claude plugin validate .`): the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the read-only `prose-reviewer` and `seo-auditor` agents; four canonical references plus reference `vale.ini` and `markdownlint.jsonc`; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. Do not assume a file is present because it is documented here — check first.
+> **Current status — v0.1.1.** First build, plus a correctness pass on tool grants. Shipped and validating clean (`./scripts/validate.sh` + `claude plugin validate .`): the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; four canonical references plus reference `vale.ini` and `markdownlint.jsonc`; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. Do not assume a file is present because it is documented here — check first.
 
 ## Domain Context
 
@@ -52,14 +52,14 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 - **Claude manifest**: `.claude-plugin/plugin.json` — `name` (`docs-editing`), `version`, `description`, `author` (an **object** `{name, url}` — `claude plugin validate` rejects a bare string), `license`, `repository`, `keywords`. Claude Code discovers components from the **default folders** (`skills/`, `agents/`, `hooks/`) automatically.
 - **Cursor manifest**: `.cursor-plugin/plugin.json` — same metadata **plus** explicit top-level path keys (`skills`, `agents`, `rules`, `hooks`). No `mcpServers` — this plugin has no MCP backend. Keep `name`/`version`/`description`/`author` identical to the Claude manifest.
 - **Skills**: `skills/<name>/SKILL.md` — shared by both hosts. The six worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router. **Skills use `allowed-tools:` (the Claude Code skill/command key — Cursor reads it too); only agents use `tools:`.**
-- **Agents**: `agents/<name>.md` — read-only, context-isolated specialists (`tools:` not `allowed-tools:`).
+- **Agents**: `agents/<name>.md` — report-only, context-isolated specialists (`tools:` not `allowed-tools:`). Neither declares `Write`/`Edit`; both declare `Bash` to run the linters, so the no-edit property is a contract in the body, not a sandbox.
 - **References**: `references/` — the four canonical rule documents plus the two reference linter configs (`vale.ini`, `markdownlint.jsonc`). Components cite these instead of duplicating rules.
 - **Cursor rules**: `rules/*.mdc` — Cursor-only rule guidance (`description` / `globs` / `alwaysApply`), referenced by the Cursor manifest's `rules` path. Shipped: `rules/docs-editing-context.mdc`.
 - **Claude hooks**: `hooks/hooks.json` — object `{ "hooks": { "SessionStart": [...], "PostToolUse": [...] } }`; use `${CLAUDE_PLUGIN_ROOT}` in command paths.
 - **Cursor hooks**: `hooks/cursor-hooks.json` — object `{ "version": 1, "hooks": { "sessionStart": [...], "afterFileEdit": [...] } }`; the command runs from the plugin root (**workspace-relative**, **not** `${CLAUDE_PLUGIN_ROOT}`).
 - **Shared hook scripts**: `hooks/session-start.sh` (detects a docs/content workspace and prints context + the skill surface) and `hooks/prose-lint-on-save.sh` (reports `vale`/`markdownlint` alerts for the just-edited Markdown file). Both host-agnostic; both exit 0 always.
 - **Claude settings**: `.claude/settings.json` enables the maintainer plugins used while developing this repo (skill-creator, superpowers, plugin-dev, claude-md-management) and pre-approves the validate commands; `.claude/CLAUDE.md` imports this file via `@../AGENTS.md`. `.claude/settings.local.json` is gitignored.
-- **Validation**: `scripts/validate.sh` (graceful local wrapper — warns and skips if Python is absent) runs `scripts/validate.py`, which checks both manifests, dual-host parity, declared component paths, kebab-case names, hook-config JSON *and script executability*, skill/agent/rule frontmatter, plus the three plugin-specific invariants below. Stdlib-only. CI pins Python, runs the validator strictly, and `bash -n`s both hook scripts ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
+- **Validation**: `scripts/validate.sh` (graceful local wrapper — warns and skips if Python is absent) runs `scripts/validate.py`, which checks both manifests, dual-host parity, declared component paths, kebab-case names, hook-config JSON *and script executability*, skill/agent/rule frontmatter, plus the four plugin-specific invariants below. Stdlib-only. CI pins Python, runs the validator strictly, and `bash -n`s both hook scripts ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
 - **Contributor docs**: `docs/` holds committed human-facing references — [install](docs/install.md), [testing](docs/testing.md), [versioning](docs/versioning.md), [authoring](docs/authoring.md). `.github/` holds issue + PR templates, `copilot-instructions.md`, and the validate workflow. (Planning/research working notes under `docs/plans/` and `docs/research/` are gitignored — not part of the published plugin.)
 
 ## Components
@@ -78,7 +78,7 @@ Scope is the **human-facing prose and content layer**. Deliberately **not** in s
 | `ai-seo` | Citability by AI search — `llms.txt` currency, Markdown twins, **validated** JSON-LD, chunk-level self-containment |
 | `docs-lint-setup` | Scaffold `.vale.ini` + `.markdownlint.jsonc`, seed the Vale vocabulary, gitignore `styles/`; never overwrites an existing config unprompted |
 
-### Agents (2, read-only)
+### Agents (2, report-only)
 
 | Agent | Purpose |
 |-------|---------|
@@ -142,7 +142,7 @@ Use feature branches and pull requests. Validation runs on every push/PR.
 
 ## Gotchas
 
-- **Agents use `tools:`, not `allowed-tools:`.** In an agent file `allowed-tools:` is ignored and the agent silently inherits *all* tools. Both shipped agents are read-only — keep them that way. The validator flags both the wrong key and a missing `tools:`.
+- **Agents use `tools:`, not `allowed-tools:`.** In an agent file `allowed-tools:` is ignored and the agent silently inherits *all* tools. Neither shipped agent may declare `Write`/`Edit` — the validator rejects that outright. Both do declare `Bash`, which is write-capable, so **"report-only" is a contract their bodies keep, not a sandbox**: say report-only, never "read-only", or the docs claim a guarantee the tool grant does not provide.
 - **`author` in `plugin.json` must be an object** (`{name, url}`); `claude plugin validate` rejects a bare string.
 - **`references/` is plugin-root-relative, and that is a real trap.** A bare `references/x.md` inside `skills/<name>/SKILL.md` is two levels off, so the first Read fails and the component improvises rules instead of grounding in them — the worst possible failure for a plugin whose value *is* its cited rules. Every component carries the resolution note (`${CLAUDE_PLUGIN_ROOT}/references/…`, `../../references/…`, or Glob), and `scripts/validate.py` checks that every cited reference exists.
 - **A frontmatter value with an unquoted `: ` silently drops all metadata.** A real YAML parser reads it as a nested mapping, so the component loads with *every* field empty — no error, just an invisible component. Quote the value or use a `>` block scalar (as the agents do). The validator guards this.

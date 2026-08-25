@@ -1,6 +1,6 @@
 # Docs Editing Plugin
 
-An AI plugin by **Cadasto B.V.** that teaches AI coding assistants **documentation, editing, and content standards** — technical writing, copy editing, marketing copy, SEO, and AI citability — through skills, two read-only review agents, session-start and prose-lint hooks, and a Cursor rule. It targets **both Claude Code and Cursor** from a single shared component set.
+An AI plugin by **Cadasto B.V.** that teaches AI coding assistants **documentation, editing, and content standards** — technical writing, copy editing, marketing copy, SEO, and AI citability — through skills, two report-only review agents, session-start and prose-lint hooks, and a Cursor rule. It targets **both Claude Code and Cursor** from a single shared component set.
 
 Pure Markdown + JSON. No build step and **no MCP server** to wire up.
 
@@ -43,8 +43,8 @@ Or from a local working copy: `claude plugin add /path/to/docs-editing-plugin`.
 | Skill `/seo-audit` | shipped | Technical and on-page audit of the **published** output — titles, descriptions, headings, canonicals, sitemap, redirects, orphans. |
 | Skill `/ai-seo` | shipped | Citability by AI search — `llms.txt`, Markdown twins, validated JSON-LD, chunk-level self-containment. |
 | Skill `/docs-lint-setup` | shipped | Scaffold `.vale.ini` + `.markdownlint.jsonc` into a repo; never overwrites an existing config unprompted. |
-| Agent `prose-reviewer` | shipped | Read-only prose review for what linters cannot see: unsourced claims, doc-kind bleed, stale inventories, terminology drift. Ranked findings. |
-| Agent `seo-auditor` | shipped | Read-only discoverability sweep over a docs tree or live site, with a mandatory coverage statement. |
+| Agent `prose-reviewer` | shipped | Report-only prose review for what linters cannot see: unsourced claims, doc-kind bleed, stale inventories, terminology drift. Ranked findings. |
+| Agent `seo-auditor` | shipped | Report-only discoverability sweep over a docs tree or live site, with a mandatory coverage statement. |
 | Session-start hook | shipped | Detects a docs/content workspace and prints one standards line plus the surface; dual-host. Silent in a repo with only a `README.md`. |
 | Prose-lint hook | shipped | After each `.md` edit, reports `vale` + `markdownlint` alerts. Advisory — **never rewrites** — and opt-in: silent unless the repo carries its own linter config. |
 | References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus reference `vale.ini` and `markdownlint.jsonc`. |
