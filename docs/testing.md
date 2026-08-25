@@ -1,6 +1,6 @@
-# Testing and Validation
+# Testing and validation
 
-This is a pure-content repository — JSON manifests + Markdown components. There is no build step or package manager. Testing means validating structure, then installing locally and exercising the components.
+This is a pure-content repository — JSON manifests + Markdown components, with no build step and no package manager. Testing means validating structure, then installing locally and exercising the components.
 
 ## Validation
 

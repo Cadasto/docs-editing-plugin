@@ -1,10 +1,10 @@
-# Skill, Agent, and Rule Authoring Conventions
+# Skill, agent, and rule authoring conventions
 
 The detailed companion to [AGENTS.md](../AGENTS.md) (which is authoritative); this expands on the *how*. The shipped components are the reference examples.
 
 ## Naming & layout
 
-- **Components are kebab-case** and namespaced `<plugin>:<component>` (e.g. `docs-editing:copy-editing`). A component's frontmatter `name` MUST equal its directory (skills) or filename stem (agents); `scripts/validate.py` enforces this.
+- **Components are kebab-case** and namespaced `<plugin>:<component>` (for example `docs-editing:copy-editing`). A component's frontmatter `name` MUST equal its directory (skills) or filename stem (agents); `scripts/validate.py` enforces this.
 - `skills/<name>/SKILL.md` (includes user-invoked slash commands) · `agents/<name>.md` · `rules/<name>.mdc`. Shared reference material lives in top-level **`references/`**. The legacy `commands/<name>.md` layout is not used — host validators treat every `commands/**/*.md` as a command and warn on missing frontmatter.
 - The router skill is named `docs-editing`, the same as the plugin, so it resolves as `docs-editing:docs-editing`. Worker skills are named for the **task**, not prefixed (`copy-editing`, not `docs-copy-editing`) — they read better as `/copy-editing` and the plugin namespace already disambiguates.
 

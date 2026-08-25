@@ -23,7 +23,7 @@ claude --plugin-dir /path/to/docs-editing-plugin
 
 `--plugin-dir` loads the plugin from disk for **that session only** — it does not persist, which makes it the right tool for dogfooding an unreleased working copy. It is repeatable (`--plugin-dir A --plugin-dir B`) and also accepts a `.zip`.
 
-There is **no `claude plugin add`**. `claude plugin install` resolves names from a configured marketplace, not filesystem paths, and `claude plugin marketplace add <path>` expects a marketplace manifest (`.claude-plugin/marketplace.json`) — which a single-plugin repository like this one does not have. For a persistent install, go through the marketplace above.
+**`claude plugin add` does not exist.** `claude plugin install` resolves names from a configured marketplace, not filesystem paths, and `claude plugin marketplace add <path>` expects a marketplace manifest (`.claude-plugin/marketplace.json`) — which a single-plugin repository like this one does not have. For a persistent install, go through the marketplace above.
 
 Combine it with a subcommand to inspect a working copy without installing:
 
@@ -73,7 +73,7 @@ Vale exits `0` clean, `1` on findings, `2` on a config error. Install it from th
 
 Without Vale the skills still apply the standards by judgment, and the save hook stays silent.
 
-`ai-seo` and `seo-audit` audit the **published** output, so they use `WebFetch` (or `curl`) against a deployed URL, or read a built output directory. Neither needs a network connection to give source-level findings, but both will label such findings as unverified against the published output.
+`ai-seo` and `seo-audit` audit the **published** output, so they use `WebFetch` (or `curl`) against a deployed URL, or read a built output directory. Neither needs a network connection to give source-level findings, but both label such findings as unverified against the published output.
 
 ## Hooks
 

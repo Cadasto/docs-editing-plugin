@@ -15,7 +15,7 @@ For a technical audience they also backfire. Developers, engineers, and clinicia
 > ❌ "Cuts documentation review time by 40%."
 > ✅ "Flags unsourced statistics, doc-kind bleed, and inventories that no longer match the tree."
 
-Specific, checkable, and more convincing to this reader than a number they will assume was invented. Hedging is not an escape hatch: "up to", "designed to", and "teams report" preserve the violation. The full rule, including the never-invent list and the repair pattern, is [`references/claims-and-evidence.md`](references/claims-and-evidence.md).
+Specific, checkable, and more convincing to this reader than a number they assume was invented. Hedging is not an escape hatch: "up to", "designed to", and "teams report" preserve the violation. The full rule, including the never-invent list and the repair pattern, is [`references/claims-and-evidence.md`](references/claims-and-evidence.md).
 
 ## Install
 
@@ -54,7 +54,7 @@ Or load a local working copy for one session: `claude --plugin-dir /path/to/docs
 
 **Prose written for people** — documentation, guides, references, page and marketing copy, changelogs, release notes, site metadata, `llms.txt`.
 
-**Not agent-instruction files.** `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, rule files, and skill or agent definitions are **read** for a repo's conventions and never authored or rewritten by these components. They address a model rather than a reader, which inverts several of the rules here — repetition becomes deliberate, hard constraints must stay hard, rigid parallel structure becomes a feature. A prose editor tuned for human readers quietly degrades them, so that genre belongs to tooling built for it. Also out of scope: source-code review, and specification/traceability authoring.
+**Not agent-instruction files.** `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, rule files, and skill or agent definitions are **read** for a repo's conventions and never authored or rewritten by these components. They address a model rather than a reader, which inverts three of the rules here — repetition becomes deliberate, hard constraints must stay hard, rigid parallel structure becomes a feature. A prose editor tuned for human readers quietly degrades them, so that genre belongs to tooling built for it. Also out of scope: source-code review, and specification/traceability authoring.
 
 ## How it decides
 
@@ -71,11 +71,18 @@ And one constraint above all three: **the repository being worked on outranks th
 No build step — the plugin is pure Markdown + JSON. Validate locally:
 
 ```bash
-./scripts/validate.sh        # manifests, dual-host parity, frontmatter, reference citations, doc sync
+./scripts/validate.sh        # manifests, parity, frontmatter, references, links, tool grants, doc sync
 claude plugin validate .     # manifest + component structure
 ```
 
-Beyond the shared checks, the validator enforces two invariants specific to this plugin: every `references/<file>` a component cites must exist (the bundled references sit at the plugin root, so a stale path fails silently at load time), and every skill and agent must be wired into both the router and the session-start surface. See [`docs/testing.md`](docs/testing.md) for the full validation story and [`AGENTS.md`](AGENTS.md) for contributor conventions.
+Beyond the shared checks, the validator enforces four invariants specific to this plugin:
+
+- **Reference resolution** — every `references/<file>` a component cites exists. The bundled references sit at the plugin root, so a stale path fails silently at load time instead of erroring.
+- **Markdown links** — every relative link resolves, and every `#anchor` matches a heading in the file it points at.
+- **Tool grants** — a component whose body prescribes a shell command declares `Bash`, and no agent declares `Write` or `Edit`. Advice a component cannot act on is a defect, not a nuance.
+- **Doc sync** — every skill and agent is named in both the router body and the session-start surface.
+
+See [`docs/testing.md`](docs/testing.md) for the full validation story and [`AGENTS.md`](AGENTS.md) for contributor conventions.
 
 ## Documentation
 
