@@ -10,7 +10,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [Unreleased]
 
 ### Added
-- References: `references/vocab-accept.txt` — a seed Vale vocabulary of technical jargon (`repo`, `config`, `frontmatter`, `validator`, `stderr`, `citability`, `crawlability`, …). Deliberately excludes British/American spelling pairs: Vale's dictionary already accepts both, verified against 3.18.0.
+- References: `references/vocab-accept.txt` — a seed Vale vocabulary of technical jargon (`repo`, `config`, `frontmatter`, `validator`, `stderr`, `citability`, `crawlability`, …). Entries are case-tolerant regexes (`[Cc]onfigs?`) because `Vale.Terms` demands a term appear exactly as listed: a bare lowercase entry silences the spelling warning and then reports every sentence-initial capital instead. Product names are listed with their exact capitalisation on purpose, so that rule enforces them. Deliberately excludes British/American spelling pairs — Vale's dictionary accepts both. Verified against Vale 3.18.0.
 
 ### Changed
 - References: `vale.ini` disables `Google.Quotes`. Google's package assumes American punctuation-inside-quotes while the house style is British, so the rule fired on correct prose — 7 error-level false positives on this repo's own docs, now zero. Recorded in the existing deliberate-deviations block, which must sit inside the `[*.{md,mdx,markdown}]` section: a rule set after the `[{CHANGELOG.md,LICENSE}]` header silently applies to that section instead.

@@ -5,50 +5,55 @@
 # run in a docs repo buries every real style finding under spelling noise --
 # 190 alerts across this plugin's own tree before this list existed.
 #
-# It does NOT need British/American spellings: Vale's dictionary already accepts
-# both (`behaviour`, `organisation`, `initialise`, `licence`, `catalogue` all
-# pass). Only jargon belongs here.
+# It does NOT need British/American spelling pairs: Vale's dictionary accepts
+# both (`behaviour`, `organisation`, `initialise`, `licence`, `catalogue` pass).
+# Only jargon belongs here.
 #
-# Each line is a regular expression, matched case-sensitively -- but a
-# lowercase entry also matches its capitalised form, so list the lowercase one.
-# `/docs-lint-setup` copies this file; append the repo's own product names,
-# domain terms, and cited proper nouns beneath it, and do not invent terms --
-# take them from prose already in the repo.
+# CONVENTION -- each line is a regular expression, and `Vale.Terms` then requires
+# the term to appear EXACTLY as written. A bare `citability` therefore accepts the
+# lowercase word but reports `Citability` at the start of a sentence or heading.
+# So write common nouns case-tolerantly, and collapse simple plurals:
+#
+#     [Cc]onfigs?     accepts config, Config, configs, Configs
+#     READMEs         a fixed capitalisation, left exact on purpose
+#
+# `/docs-lint-setup` copies this file. Append the repo's own product names,
+# domain terms, and cited proper nouns beneath it -- taken from prose already in
+# the repo, never invented. Give a product name its exact capitalisation so
+# `Vale.Terms` enforces it (`GitHub`, not `[Gg]ithub`); that is the rule working
+# for you rather than against you.
 
 # --- Repository and tooling jargon ---
-config
-configs
-repo
-repos
-frontmatter
-gitignored
-subcommand
-toolchain
-stderr
-stdout
-validator
-validators
-namespace
-namespaced
-inlined
-inlining
-erroring
-unbuilt
-untrusted
+[Cc]onfigs?
+[Rr]epos?
+[Ff]rontmatter
+[Gg]itignored
+[Ss]ubcommands?
+[Tt]oolchains?
+[Ss]tderr
+[Ss]tdout
+[Vv]alidators?
+[Nn]amespaces?
+[Nn]amespaced
+[Ii]nlined
+[Ii]nlining
+[Ee]rroring
+[Uu]nbuilt
+[Uu]ntrusted
 READMEs
 ADRs
 
 # --- Documentation, SEO, and AI-citability domain ---
-citability
-crawlability
-discoverability
-noindex
-dogfood
-dogfooding
-onboarding
-disambiguates
-formattable
-nominalisations
-unsourced
-unspaced
-unseriousness
+[Cc]itability
+[Cc]rawlability
+[Dd]iscoverability
+[Nn]oindex
+[Dd]ogfood
+[Dd]ogfooding
+[Oo]nboarding
+[Dd]isambiguates
+[Ff]ormattable
+[Nn]ominalisations
+[Uu]nsourced
+[Uu]nspaced
+[Uu]nseriousness
