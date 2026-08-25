@@ -27,13 +27,16 @@ Vale checks **prose**, not Markdown structure. Heading nesting, fence language t
    cp "<plugin-root>/references/vale.ini" .vale.ini
    ```
 
-3. **Seed the vocabulary.** `Vocab = Cadasto` needs the directory to exist or `vale sync` warns:
+3. **Seed the vocabulary.** The directory name must match the config's `Vocab` value. The shipped default is `Project`; rename both together if the repo prefers its own name:
 
    ```bash
-   mkdir -p styles/config/vocabularies/Cadasto
-   cp "<plugin-root>/references/vocab-accept.txt" styles/config/vocabularies/Cadasto/accept.txt
-   touch styles/config/vocabularies/Cadasto/reject.txt
+   VOCAB=Project   # must equal `Vocab =` in .vale.ini
+   mkdir -p "styles/config/vocabularies/$VOCAB"
+   cp "<plugin-root>/references/vocab-accept.txt" "styles/config/vocabularies/$VOCAB/accept.txt"
+   touch "styles/config/vocabularies/$VOCAB/reject.txt"
    ```
+
+   A `Vocab` with no matching directory is a **hard error on the next lint** — `E100 [vocab] … vocabulary not found`, exit 2. `vale sync` does *not* catch it: it reports success and exits 0, so the config looks healthy until someone lints.
 
    **Copy the seed rather than creating an empty file.** `Vale.Spelling` uses a general dictionary, so an empty `accept.txt` buries every real style finding under jargon false positives — `repo`, `config`, `frontmatter`, `validator`. On this plugin's own tree that was 190 spelling alerts, against 11 once seeded. It does not need British and American spellings: Vale's dictionary accepts both.
 
