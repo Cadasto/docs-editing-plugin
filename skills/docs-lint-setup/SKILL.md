@@ -31,11 +31,13 @@ Vale checks **prose**, not Markdown structure. Heading nesting, fence language t
 
    ```bash
    mkdir -p styles/config/vocabularies/Cadasto
-   touch styles/config/vocabularies/Cadasto/accept.txt
+   cp "<plugin-root>/references/vocab-accept.txt" styles/config/vocabularies/Cadasto/accept.txt
    touch styles/config/vocabularies/Cadasto/reject.txt
    ```
 
-   `accept.txt` holds the repo's canonical terms, product names, and ordinary technical jargon — this is what keeps naming fixed per `references/style-guide.md` §3, **and** what suppresses Vale's spelling and heading-capitalisation false positives on proper nouns. `reject.txt` holds banned vocabulary, so the linter catches marketing words instead of a reviewer. Seed both from terminology already in the repo's docs; do not invent terms.
+   **Copy the seed rather than creating an empty file.** `Vale.Spelling` uses a general dictionary, so an empty `accept.txt` buries every real style finding under jargon false positives — `repo`, `config`, `frontmatter`, `validator`. On this plugin's own tree that was 190 spelling alerts, against 11 once seeded. It does not need British and American spellings: Vale's dictionary accepts both.
+
+   Then **append the repo's own terms** — product names, domain vocabulary, and cited proper nouns — taken from prose already in the repo; do not invent terms. This is also what keeps naming fixed per `references/style-guide.md` §3. `reject.txt` holds banned vocabulary, so the linter catches marketing words instead of a reviewer.
 
 4. **Gitignore the downloaded styles.** `StylesPath = styles` holds downloadable packages, not source:
 
@@ -59,7 +61,7 @@ Vale checks **prose**, not Markdown structure. Heading nesting, fence language t
 
 6. **Expect a loud first run, and do not gut the config to quiet it.** Triage in order: `--minAlertLevel=error` for a shippable baseline, fix those, then step down to `warning` and `suggestion`. Disable a rule only when it is genuinely wrong for the repo, with a comment saying why, as the reference config does.
 
-   Two rules are reliably noisy on technical prose and are the first to reach for: `write-good.E-Prime` (objects to every "is") and `Vale.Spelling` (flags ordinary jargon until the vocabulary is seeded).
+   `write-good.E-Prime` is reliably noisy on technical prose — it objects to every "is" — and is the first to reach for. Note that `Vale.Spelling` noise means the vocabulary is not seeded yet: fix it in step 3 rather than by disabling the rule, which is a genuine check.
 
 7. **CI, with `--ci`.** Add a job running `vale --minAlertLevel=error` on pull requests. Match the repo's existing workflow style; pin the Vale version. Do not gate on the pre-existing backlog — scope to changed files, or land the baseline first.
 

@@ -47,7 +47,7 @@ Or load a local working copy for one session: `claude --plugin-dir /path/to/docs
 | Agent `seo-auditor` | shipped | Report-only discoverability sweep over a docs tree or live site, with a mandatory coverage statement. |
 | Session-start hook | shipped | Detects a docs/content workspace and prints one standards line plus the surface; dual-host. Silent in a repo with only a `README.md`. |
 | Prose-lint hook | shipped | After each `.md` edit, reports `vale` alerts. Advisory — **never rewrites** — and opt-in: silent unless the repo carries its own `.vale.ini`. |
-| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus the reference `vale.ini`. |
+| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus the reference `vale.ini` and its `vocab-accept.txt` seed. |
 | Cursor rule `docs-editing-context.mdc` | shipped | Markdown- and docs-scoped guidance mirroring the router for Cursor. |
 
 ## What it covers

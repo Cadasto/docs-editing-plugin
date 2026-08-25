@@ -9,13 +9,20 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Added
+- References: `references/vocab-accept.txt` — a seed Vale vocabulary of technical jargon (`repo`, `config`, `frontmatter`, `validator`, `stderr`, `citability`, `crawlability`, …). Deliberately excludes British/American spelling pairs: Vale's dictionary already accepts both, verified against 3.18.0.
+
 ### Changed
+- Docs: `AGENTS.md` no longer pins a version (`Current status — v0.1.1`, itself stale by two releases). The version and its changes live in `CHANGELOG.md` and the git tags; repeating them in an instruction file only creates a second copy to rot. The component inventory and the check-the-tree-first warning stay.
+- Skills: `/docs-lint-setup` copies the vocabulary seed instead of `touch`ing an empty `accept.txt`, then appends repo-specific terms. Its triage guidance no longer lists `Vale.Spelling` as inherently noisy — spelling noise now means step 3 was skipped, and the fix is to seed the vocabulary rather than disable a genuine check.
+- References: `vale.ini` documents where the vocabulary seed comes from and why an empty one is harmful.
 - Docs: `docs/versioning.md`, `AGENTS.md` — the `cadasto` catalog pins each entry to a release tag, so a tag here ships nothing until the entry's `version` and `source.ref` move. Repinning is now release step 8.
 - Docs: `docs/testing.md`, `docs/versioning.md`, `docs/authoring.md` H1s are sentence case per `references/style-guide.md` §3; product names keep their capitals.
 - Docs: opened `docs/install.md`'s no-`claude plugin add` note and `docs/testing.md`'s overview with the conclusion rather than "There is …" (§5, answer first).
 - Docs: `docs/authoring.md` uses "for example" over "e.g." (`Google.Latin`).
 
 ### Fixed
+- Linting: the reference Vale setup shipped an **empty** vocabulary, so `Vale.Spelling` flagged ordinary jargon and buried every real style finding — 190 spelling alerts across this plugin's own tree, against 11 once seeded (the rest being product names and cited proper nouns, which belong in a repo's own additions). A scaffolded repo now lints clean on first run.
 - Docs: `README.md` claimed the validator enforces **two** plugin-specific invariants and named two. It enforces four — reference resolution, markdown links, tool grants, doc sync — which `docs/testing.md` already stated correctly, so the README was the file out of step. Exactly the inventory rot `references/claims-and-evidence.md` §5 warns about, in the plugin's own shop window.
 - Docs: `docs/versioning.md`, `AGENTS.md` claimed `vale` "warns but exits 0" for an unknown rule name. It does not warn — an unknown rule yields **empty stderr and exit 0**, which is what makes the drift dangerous, so the gotcha undercut its own point. An unknown *style package* is the loud case (`E100 [loadStyles]`, exit 2). Verified against Vale 3.18.0.
 - Docs: fixed the rules the reference `vale.ini` escalates to **error** in this repo's own prose — `Google.Will` (future tense where present belongs, §1) in `README.md` and `docs/install.md`, and `write-good.Weasel` ("several", §2) in `README.md`, replaced with the count the sentence goes on to list.

@@ -1,0 +1,54 @@
+# Starter `accept.txt` for a Vale vocabulary (`Vocab = …` in vale.ini).
+#
+# Vale's built-in `Vale.Spelling` check uses a general dictionary, so it flags
+# ordinary technical jargon as misspelt. Without a seeded vocabulary the first
+# run in a docs repo buries every real style finding under spelling noise --
+# 190 alerts across this plugin's own tree before this list existed.
+#
+# It does NOT need British/American spellings: Vale's dictionary already accepts
+# both (`behaviour`, `organisation`, `initialise`, `licence`, `catalogue` all
+# pass). Only jargon belongs here.
+#
+# Each line is a regular expression, matched case-sensitively -- but a
+# lowercase entry also matches its capitalised form, so list the lowercase one.
+# `/docs-lint-setup` copies this file; append the repo's own product names,
+# domain terms, and cited proper nouns beneath it, and do not invent terms --
+# take them from prose already in the repo.
+
+# --- Repository and tooling jargon ---
+config
+configs
+repo
+repos
+frontmatter
+gitignored
+subcommand
+toolchain
+stderr
+stdout
+validator
+validators
+namespace
+namespaced
+inlined
+inlining
+erroring
+unbuilt
+untrusted
+READMEs
+ADRs
+
+# --- Documentation, SEO, and AI-citability domain ---
+citability
+crawlability
+discoverability
+noindex
+dogfood
+dogfooding
+onboarding
+disambiguates
+formattable
+nominalisations
+unsourced
+unspaced
+unseriousness
