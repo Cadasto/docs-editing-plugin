@@ -99,7 +99,7 @@ No build step — pure Markdown + JSON. Validate and dogfood locally:
 ```bash
 ./scripts/validate.sh                          # manifests, parity, frontmatter, reference citations, doc sync
 claude plugin validate .                       # manifest + component structure (no Python needed)
-claude plugin add /path/to/docs-editing-plugin # install locally
+claude --plugin-dir /path/to/docs-editing-plugin        # load a working copy (session-scoped)
 ```
 
 Then exercise the components on a real docs repository and verify skill auto-triggering and both agents on both hosts. Fuller guidance: [`docs/`](docs/).
@@ -155,4 +155,6 @@ Use feature branches and pull requests. Validation runs on every push/PR.
 - **A large first Vale run is normal — don't gut the config to silence it.** Triage by raising `MinAlertLevel` to `error`, fixing those, then stepping down. Disabling a rule needs a comment saying why, as the reference configs do.
 - **Inventories in this repo rot too.** The component tables in README.md and AGENTS.md, and the counts in them, must be verified against the tree before being edited. The plugin's own rule applies to the plugin's own docs.
 - **Don't duplicate the `sdd` plugin.** This plugin owns prose and content; requirements, RFC-2119 specifications, ADRs, and traceability belong to `sdd`. When extending, resist adding a spec-authoring or traceability skill that competes.
+- **`claude plugin <unknown-subcommand>` prints the general help and exits 0.** It does not error, so a non-existent command reads as working in a script or a doc review. `claude plugin add` does not exist and never did — the real subcommands are `details disable enable eval init install list marketplace prune tag uninstall update validate`. Verify a CLI invocation by running it and checking behaviour, not just the exit code.
+- **There is no local-path *install*.** `claude --plugin-dir <path>` loads a working copy for **one session** (repeatable; also takes a `.zip`), and is the dogfooding path. `claude plugin install` resolves names from a configured marketplace, and `claude plugin marketplace add <path>` needs a `.claude-plugin/marketplace.json`, which a single-plugin repo does not have. A persistent install therefore goes through the marketplace.
 - **Register in the marketplace separately.** Public availability requires an entry in the `cadasto` marketplace (`cadasto/plugin-marketplace`); the plugin is registered there independently of this repo.

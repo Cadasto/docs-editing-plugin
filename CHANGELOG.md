@@ -11,6 +11,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ### Fixed
 - Skills: `marketing-copy` prescribed `vale` in its pre-handover self-check while declaring no `Bash` in `allowed-tools`, so the instruction could not be followed without a permission prompt its sibling skills avoid.
+- Docs: the local install command was `claude plugin add /path/to/docs-editing-plugin`, which **does not exist** — `claude plugin` prints its general help and exits 0 for an unknown subcommand, so the wrong command never failed visibly. Replaced with `claude --plugin-dir <path>` (session-scoped) in `README.md`, `docs/install.md`, `docs/versioning.md` and `AGENTS.md`, with the persistent-install route stated explicitly.
 - Agents, docs: `prose-reviewer` and `seo-auditor` were described as **read-only** in their own bodies, the README, `AGENTS.md` and the release notes while declaring `Bash`, which is write-capable. Both are now **report-only** — no `Write`/`Edit` in the tool grant, and no-edit stated as a contract the body keeps rather than a sandbox that enforces it.
 
 ### Added

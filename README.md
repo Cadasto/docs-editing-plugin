@@ -26,7 +26,7 @@ Specific, checkable, and more convincing to this reader than a number they will 
 /plugin install docs-editing@cadasto
 ```
 
-Or from a local working copy: `claude plugin add /path/to/docs-editing-plugin`.
+Or load a local working copy for one session: `claude --plugin-dir /path/to/docs-editing-plugin`.
 
 **Cursor**: add this repository as a plugin (Settings → Plugins). See [`docs/install.md`](docs/install.md) for both hosts.
 

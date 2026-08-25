@@ -14,7 +14,7 @@ While on the `0.x` line, treat the plugin as pre-stable: a breaking change may s
 
 1. Bump `version` in **both** manifests (they must agree): `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`. Keep `description` and `author` identical across both — `scripts/validate.py` enforces this parity.
 2. Run `./scripts/validate.sh` and `claude plugin validate .`.
-3. **Dogfood:** install from a working copy (`claude plugin add /path/to/docs-editing-plugin`) and exercise the components on a real docs repository on **both** hosts — see [testing.md](testing.md). Include the claims-refusal test.
+3. **Dogfood:** load a working copy (`claude --plugin-dir /path/to/docs-editing-plugin`) and exercise the components on a real docs repository on **both** hosts — see [testing.md](testing.md). Include the claims-refusal test.
 4. Fold the accumulated `## [Unreleased]` notes into a dated `## [X.Y.Z] - YYYY-MM-DD` section in [CHANGELOG.md](../CHANGELOG.md) (Keep a Changelog — groups in order Added, Changed, Deprecated, Removed, Fixed, Security; see [AGENTS.md](../AGENTS.md#changelog-style)).
 5. Sync the docs surface (AGENTS.md, README.md) with what shipped. The router body and `hooks/session-start.sh` are checked mechanically by the validator, so a missed component fails CI rather than shipping quietly.
 6. Commit (`chore(release): vX.Y.Z`) and tag: `git tag -a vX.Y.Z -m "docs-editing-plugin vX.Y.Z"`.

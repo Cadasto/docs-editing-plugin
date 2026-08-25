@@ -15,10 +15,20 @@ Distributed for both [Claude Code](https://docs.claude.com/en/docs/claude-code/p
 
 The marketplace name is `cadasto`, so the plugin is addressed as `docs-editing@cadasto`.
 
-### Install (local working copy, for development)
+### Load a local working copy (for development)
 
 ```bash
-claude plugin add /path/to/docs-editing-plugin
+claude --plugin-dir /path/to/docs-editing-plugin
+```
+
+`--plugin-dir` loads the plugin from disk for **that session only** — it does not persist, which makes it the right tool for dogfooding an unreleased working copy. It is repeatable (`--plugin-dir A --plugin-dir B`) and also accepts a `.zip`.
+
+There is **no `claude plugin add`**. `claude plugin install` resolves names from a configured marketplace, not filesystem paths, and `claude plugin marketplace add <path>` expects a marketplace manifest (`.claude-plugin/marketplace.json`) — which a single-plugin repository like this one does not have. For a persistent install, go through the marketplace above.
+
+Combine it with a subcommand to inspect a working copy without installing:
+
+```bash
+claude --plugin-dir /path/to/docs-editing-plugin plugin details docs-editing
 ```
 
 ### Inspect / update
