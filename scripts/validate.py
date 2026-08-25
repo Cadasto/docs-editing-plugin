@@ -373,7 +373,7 @@ READONLY_CLAIM_RE = re.compile(
 # Shell usage a body PRESCRIBES: a shell-tagged fence, or an inline span starting with one
 # of the CLIs this plugin actually tells the assistant to run.
 SHELL_FENCE_RE = re.compile(r"^(?:```+|~~~+)(?:bash|sh|shell|console|zsh)\b", re.MULTILINE)
-PRESCRIBED_CLI_RE = re.compile(r"`(vale|markdownlint|markdownlint-cli2|curl)\b[^`]*`")
+PRESCRIBED_CLI_RE = re.compile(r"`(vale|curl)\b[^`]*`")
 
 
 def validate_tool_grants():

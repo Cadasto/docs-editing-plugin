@@ -14,6 +14,14 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Docs: the local install command was `claude plugin add /path/to/docs-editing-plugin`, which **does not exist** — `claude plugin` prints its general help and exits 0 for an unknown subcommand, so the wrong command never failed visibly. Replaced with `claude --plugin-dir <path>` (session-scoped) in `README.md`, `docs/install.md`, `docs/versioning.md` and `AGENTS.md`, with the persistent-install route stated explicitly.
 - Agents, docs: `prose-reviewer` and `seo-auditor` were described as **read-only** in their own bodies, the README, `AGENTS.md` and the release notes while declaring `Bash`, which is write-capable. Both are now **report-only** — no `Write`/`Edit` in the tool grant, and no-edit stated as a contract the body keeps rather than a sandbox that enforces it.
 
+### Removed
+- Dropped the **markdownlint** integration entirely: deleted `references/markdownlint.jsonc`, removed the tool from `docs-lint-setup` (now Vale-only), `copy-editing`, `technical-writing`, the `docs-editing` router, `prose-reviewer`, the Cursor rule, and both hooks. It required a Node toolchain that could not be verified, and prescribing an unrunnable tool contradicts the plugin's own advice-equals-tooling principle.
+
+### Changed
+- References: `style-guide.md` §6 (Markdown mechanics) no longer claims tool enforcement — those rules are conventions applied by judgment, and a consuming repo's own structural linter takes precedence.
+- Hooks: `prose-lint-on-save.sh` is Vale-only and opt-in on `.vale.ini` alone; `session-start.sh` no longer treats a markdownlint config as a docs-workspace signal.
+- Docs: `docs/install.md` records Vale's exit codes (`0` clean, `1` findings, `2` config error) and that the release binary is the working install route — `go install` fails to build.
+
 ### Added
 - Validation: tool-grant invariants — a component whose body prescribes a shell command must declare `Bash`; an agent must not declare `Write`/`Edit`, nor call itself "read-only" while holding a write-capable tool. Both are negative-tested against the defects above.
 

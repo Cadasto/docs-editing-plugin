@@ -60,7 +60,6 @@ Apply `references/style-guide.md` (voice, person, sentence economy, headings, Ma
 ## 5 · Verify before claiming done
 
 ```bash
-markdownlint-cli2 "<file>"     # structure (see references/markdownlint.jsonc)
 vale "<file>"                  # prose style (see references/vale.ini)
 ```
 

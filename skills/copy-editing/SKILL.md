@@ -29,10 +29,9 @@ With `--report-only`, produce findings and do not touch the file.
 
 ```bash
 vale "<file>"                  # prose style (references/vale.ini)
-markdownlint-cli2 "<file>"     # Markdown structure (references/markdownlint.jsonc)
 ```
 
-Fix what the tools flag before spending judgment on what they cannot see. If a repo has its own `.vale.ini` / `.markdownlint*`, those win — run them and do not argue with them. If neither tool is installed, say so and proceed by hand rather than silently skipping.
+Fix what the tool flags before spending judgment on what it cannot see. If the repo ships its own `.vale.ini` — or any other linter config — that wins: run it and do not argue with it. If Vale is not installed, say so and proceed by hand rather than silently skipping.
 
 ## 2 · The passes, in this order
 
@@ -72,7 +71,7 @@ Always report, whether or not you edited. Lead with the highest-impact findings:
 4. **Left alone deliberately** — and why (out of contract, ambiguous fact, repo style wins, needs the author).
 5. **Open questions for the author** — facts you could not verify.
 
-Re-run `vale` and `markdownlint` after editing and report the result. Do not claim the prose is clean without having run them.
+Re-run `vale` after editing and report the result. Do not claim the prose is clean without having run it. Markdown mechanics (pass 6) have no shipped linter — check them by eye.
 
 ## 5 · Hand off
 

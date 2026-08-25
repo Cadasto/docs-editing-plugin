@@ -55,7 +55,7 @@ body:
       placeholder: |
         - AI assistant: Claude Code, Cursor, etc.
         - OS: macOS / Linux / Windows (WSL)
-        - Prose linters installed (if relevant): vale --version / markdownlint-cli2 --version
+        - Vale installed (if relevant): vale --version
         - Docs generator (if relevant): MkDocs / Docusaurus / other
     validations:
       required: true

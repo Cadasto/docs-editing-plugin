@@ -1,5 +1,5 @@
 ---
-description: Documentation and content standards — every claim traceable to a source (never invent statistics, testimonials, or superlatives); one document kind per file; run vale and markdownlint rather than reasoning style out by hand. Mirrors the docs-editing router skill for Cursor.
+description: Documentation and content standards — every claim traceable to a source (never invent statistics, testimonials, or superlatives); one document kind per file; run vale rather than reasoning style out by hand. Mirrors the docs-editing router skill for Cursor.
 globs: ["**/*.md", "**/*.mdx", "**/*.markdown", "docs/**", "pages/**", "content/**", "llms.txt"]
 alwaysApply: false
 ---
@@ -29,7 +29,7 @@ Answer first — the conclusion, command, or definition opens each section; back
 
 ## Run the tools
 
-Whatever `vale` and `markdownlint` enforce, run them rather than reasoning it out. The repo's own `.vale.ini` / `.markdownlint*` win; `/docs-lint-setup` scaffolds them if absent.
+Whatever `vale` enforces, run it rather than reasoning it out. The repo's own `.vale.ini` (or any linter config it ships) wins; `/docs-lint-setup` scaffolds Vale if absent. Markdown *structure* has no shipped enforcer — apply it by judgment.
 
 ## Skills
 

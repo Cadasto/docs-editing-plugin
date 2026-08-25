@@ -30,7 +30,7 @@ Or load a local working copy for one session: `claude --plugin-dir /path/to/docs
 
 **Cursor**: add this repository as a plugin (Settings → Plugins). See [`docs/install.md`](docs/install.md) for both hosts.
 
-**Prerequisites** — none. The skills apply the standards by judgment with no tooling installed. To make the mechanical half machine-enforced, install [Vale](https://vale.sh) and [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) and run `/docs-lint-setup` in your repo; see [Host toolchain](docs/install.md#host-toolchain-optional-but-recommended).
+**Prerequisites** — none. The skills apply the standards by judgment with no tooling installed. To make the prose rules machine-enforced, install [Vale](https://vale.sh) and run `/docs-lint-setup` in your repo; see [Host toolchain](docs/install.md#host-toolchain-optional-but-recommended).
 
 ## Component surface
 
@@ -42,12 +42,12 @@ Or load a local working copy for one session: `claude --plugin-dir /path/to/docs
 | Skill `/marketing-copy` | shipped | Landing, feature, and announcement copy for technical audiences, with the anti-fabrication guardrails applied before drafting. |
 | Skill `/seo-audit` | shipped | Technical and on-page audit of the **published** output — titles, descriptions, headings, canonicals, sitemap, redirects, orphans. |
 | Skill `/ai-seo` | shipped | Citability by AI search — `llms.txt`, Markdown twins, validated JSON-LD, chunk-level self-containment. |
-| Skill `/docs-lint-setup` | shipped | Scaffold `.vale.ini` + `.markdownlint.jsonc` into a repo; never overwrites an existing config unprompted. |
+| Skill `/docs-lint-setup` | shipped | Scaffold `.vale.ini` and seed the vocabulary; never overwrites an existing config unprompted. |
 | Agent `prose-reviewer` | shipped | Report-only prose review for what linters cannot see: unsourced claims, doc-kind bleed, stale inventories, terminology drift. Ranked findings. |
 | Agent `seo-auditor` | shipped | Report-only discoverability sweep over a docs tree or live site, with a mandatory coverage statement. |
 | Session-start hook | shipped | Detects a docs/content workspace and prints one standards line plus the surface; dual-host. Silent in a repo with only a `README.md`. |
-| Prose-lint hook | shipped | After each `.md` edit, reports `vale` + `markdownlint` alerts. Advisory — **never rewrites** — and opt-in: silent unless the repo carries its own linter config. |
-| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus reference `vale.ini` and `markdownlint.jsonc`. |
+| Prose-lint hook | shipped | After each `.md` edit, reports `vale` alerts. Advisory — **never rewrites** — and opt-in: silent unless the repo carries its own `.vale.ini`. |
+| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus the reference `vale.ini`. |
 | Cursor rule `docs-editing-context.mdc` | shipped | Markdown- and docs-scoped guidance mirroring the router for Cursor. |
 
 ## What it covers
@@ -62,7 +62,7 @@ Three principles, in priority order:
 
 1. **Evidence before persuasion** — the rule above. It outranks every stylistic preference.
 2. **One document kind per file** — most bad documentation is a tutorial and a reference merged into one page. Decide the kind first ([Diátaxis](https://diataxis.fr)-based; see [`references/doc-types.md`](references/doc-types.md)), then write only that kind.
-3. **Deterministic beats prose** — whatever `vale` or `markdownlint` enforces, run the tool rather than reasoning it out by hand.
+3. **Deterministic beats prose** — whatever `vale` enforces, run the tool rather than reasoning it out by hand. Markdown *structure* has no shipped enforcer; those conventions are applied by judgment.
 
 And one constraint above all three: **the repository being worked on outranks this plugin.** Every skill reads the target repo's `AGENTS.md`, style guide, and linter config first, and reports a conflict rather than silently overriding it — including any named ground-truth source for domain facts.
 

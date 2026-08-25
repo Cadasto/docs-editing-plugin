@@ -10,9 +10,6 @@ is_docs_workspace() {
            docusaurus.config.js docusaurus.config.ts docusaurus.config.mjs; do
     [ -f "$f" ] && return 0
   done
-  for f in .markdownlint.json .markdownlint.jsonc .markdownlint.yaml .markdownlint.yml; do
-    [ -f "$f" ] && return 0
-  done
   # A docs/ or pages/ tree that actually contains Markdown. Bounded so session start
   # stays fast; a bare README.md deliberately does NOT count (it is in every repo).
   # Group the -name tests: `-o` binds loosely, so an ungrouped

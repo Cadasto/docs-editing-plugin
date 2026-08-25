@@ -4,7 +4,7 @@ The canonical style rules for **human-facing** prose this plugin writes or edits
 
 Agent-instruction files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, rule and skill definitions) are **out of scope** — they are written for a model, not a person, and several rules here invert for them. See [doc-types.md §3](doc-types.md).
 
-Mechanically enforceable rules name their enforcing tool, so advice and tooling stay in step (`references/vale.ini`, `references/markdownlint.jsonc`; scaffold both with `/docs-lint-setup`).
+Rules that a tool can enforce name that tool, so advice and tooling stay in step. **Vale** owns the prose rules (`references/vale.ini`; scaffold with `/docs-lint-setup`). The Markdown-mechanics rules in §6 have no shipped enforcer — apply them by judgment.
 
 ## 1. Voice and grammatical person
 
@@ -59,14 +59,15 @@ Never use first-person plural ("we recommend") in reference docs — it hides wh
 
 ## 6. Markdown mechanics
 
-Enforced by `markdownlint` (`references/markdownlint.jsonc`):
+**Not tool-enforced.** Vale checks prose, not Markdown structure, and this plugin ships no structural linter — so these are conventions to apply while writing and to check by eye when reviewing. Where a repo already runs a Markdown linter, that config wins; run it and do not argue with it.
 
 - ATX headings (`##`), not underlines.
-- Fenced code blocks with a language, not indented blocks.
+- Fenced code blocks with a language tag, not indented blocks. An untagged fence loses syntax highlighting silently.
 - Blank line around headings, lists, and fences.
 - No trailing whitespace; single trailing newline.
 - Reference-style or inline links consistently, not mixed.
-- Line length is **not** enforced — semantic line breaks (one clause per line) are welcome and make diffs readable.
+- One `H1`, matching the title; no skipped heading levels (see §5).
+- Line length is deliberately **unconstrained** — semantic line breaks (one clause per line) are welcome and make diffs readable.
 
 ## 7. What this guide does not cover
 

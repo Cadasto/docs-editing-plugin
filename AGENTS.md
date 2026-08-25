@@ -8,7 +8,7 @@ The **Docs Editing Plugin** (`docs-editing`) is an AI plugin by Cadasto B.V. tha
 
 It is **general-purpose and stack-agnostic** by design: the components operate on prose (`*.md`, page copy, site metadata, `llms.txt`) and on the target repository's own conventions, so the same skills serve an MkDocs site, a Docusaurus site, and a plain `docs/` tree unchanged.
 
-> **Current status — v0.1.1.** First build, plus a correctness pass on tool grants. Shipped and validating clean (`./scripts/validate.sh` + `claude plugin validate .`): the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; four canonical references plus reference `vale.ini` and `markdownlint.jsonc`; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. Do not assume a file is present because it is documented here — check first.
+> **Current status — v0.1.1.** First build, plus a correctness pass on tool grants. Shipped and validating clean (`./scripts/validate.sh` + `claude plugin validate .`): the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; four canonical references plus the reference `vale.ini`; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. Do not assume a file is present because it is documented here — check first.
 
 ## Domain Context
 
@@ -33,7 +33,9 @@ Guidance must be grounded in these, not in personal preference. Each is the sing
 - **[`references/doc-types.md`](references/doc-types.md)** — the four document kinds and their boundary rules, based on **Diátaxis** (<https://diataxis.fr>), plus the fixed contracts for `README.md`, `CHANGELOG.md` ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/)), and migration notes — and §3, the agent-instruction files that are deliberately out of scope.
 - **[`references/seo-checklist.md`](references/seo-checklist.md)** — on-page essentials, crawlability, content signals, and the AI-citability layer (`llms.txt` per <https://llmstxt.org>, Markdown twins, JSON-LD per schema.org).
 
-**Deterministic beats prose.** Where a tool enforces a rule, run the tool: **Vale** (<https://vale.sh>) owns prose style, **markdownlint** owns Markdown structure. The reference configs are `references/vale.ini` and `references/markdownlint.jsonc`; `/docs-lint-setup` scaffolds them. A component must never claim a clean lint it did not run.
+**Deterministic beats prose.** Where a tool enforces a rule, run the tool: **Vale** (<https://vale.sh>) owns prose style. The reference config is `references/vale.ini`; `/docs-lint-setup` scaffolds it. A component must never claim a clean lint it did not run.
+
+**Markdown *structure* has no shipped enforcer.** Vale checks prose only. The mechanics in `references/style-guide.md` §6 — heading nesting, fence language tags, trailing whitespace — are conventions applied by judgment. Do not write guidance implying a structural linter ships here, and where a consuming repo runs one, respect its config rather than replacing it.
 
 **The target repository outranks this plugin.** Every component reads the repo being worked on — its `AGENTS.md`/`CLAUDE.md`, style guide, `CONTRIBUTING.md`, and linter configs — *first*, and treats a conflict as the repo's win, reported rather than silently overridden. This matters most for a named **ground-truth source** for domain facts: where a repo names one, domain statements come from it, never from model memory.
 
@@ -53,11 +55,11 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 - **Cursor manifest**: `.cursor-plugin/plugin.json` — same metadata **plus** explicit top-level path keys (`skills`, `agents`, `rules`, `hooks`). No `mcpServers` — this plugin has no MCP backend. Keep `name`/`version`/`description`/`author` identical to the Claude manifest.
 - **Skills**: `skills/<name>/SKILL.md` — shared by both hosts. The six worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router. **Skills use `allowed-tools:` (the Claude Code skill/command key — Cursor reads it too); only agents use `tools:`.**
 - **Agents**: `agents/<name>.md` — report-only, context-isolated specialists (`tools:` not `allowed-tools:`). Neither declares `Write`/`Edit`; both declare `Bash` to run the linters, so the no-edit property is a contract in the body, not a sandbox.
-- **References**: `references/` — the four canonical rule documents plus the two reference linter configs (`vale.ini`, `markdownlint.jsonc`). Components cite these instead of duplicating rules.
+- **References**: `references/` — the four canonical rule documents plus the reference linter config (`vale.ini`). Components cite these instead of duplicating rules.
 - **Cursor rules**: `rules/*.mdc` — Cursor-only rule guidance (`description` / `globs` / `alwaysApply`), referenced by the Cursor manifest's `rules` path. Shipped: `rules/docs-editing-context.mdc`.
 - **Claude hooks**: `hooks/hooks.json` — object `{ "hooks": { "SessionStart": [...], "PostToolUse": [...] } }`; use `${CLAUDE_PLUGIN_ROOT}` in command paths.
 - **Cursor hooks**: `hooks/cursor-hooks.json` — object `{ "version": 1, "hooks": { "sessionStart": [...], "afterFileEdit": [...] } }`; the command runs from the plugin root (**workspace-relative**, **not** `${CLAUDE_PLUGIN_ROOT}`).
-- **Shared hook scripts**: `hooks/session-start.sh` (detects a docs/content workspace and prints context + the skill surface) and `hooks/prose-lint-on-save.sh` (reports `vale`/`markdownlint` alerts for the just-edited Markdown file). Both host-agnostic; both exit 0 always.
+- **Shared hook scripts**: `hooks/session-start.sh` (detects a docs/content workspace and prints context + the skill surface) and `hooks/prose-lint-on-save.sh` (reports `vale` alerts for the just-edited Markdown file). Both host-agnostic; both exit 0 always.
 - **Claude settings**: `.claude/settings.json` enables the maintainer plugins used while developing this repo (skill-creator, superpowers, plugin-dev, claude-md-management) and pre-approves the validate commands; `.claude/CLAUDE.md` imports this file via `@../AGENTS.md`. `.claude/settings.local.json` is gitignored.
 - **Validation**: `scripts/validate.sh` (graceful local wrapper — warns and skips if Python is absent) runs `scripts/validate.py`, which checks both manifests, dual-host parity, declared component paths, kebab-case names, hook-config JSON *and script executability*, skill/agent/rule frontmatter, plus the four plugin-specific invariants below. Stdlib-only. CI pins Python, runs the validator strictly, and `bash -n`s both hook scripts ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
 - **Contributor docs**: `docs/` holds committed human-facing references — [install](docs/install.md), [testing](docs/testing.md), [versioning](docs/versioning.md), [authoring](docs/authoring.md). `.github/` holds issue + PR templates, `copilot-instructions.md`, and the validate workflow. (Planning/research working notes under `docs/plans/` and `docs/research/` are gitignored — not part of the published plugin.)
@@ -76,7 +78,7 @@ Scope is the **human-facing prose and content layer**. Deliberately **not** in s
 | `marketing-copy` | Landing, feature, and announcement copy — substance before words, mechanism instead of invented outcome, explicit self-check before handing over |
 | `seo-audit` | Technical and on-page audit of the **published** output; ranked by reader impact, with an honest coverage statement; `--fix` edits source, never build output |
 | `ai-seo` | Citability by AI search — `llms.txt` currency, Markdown twins, **validated** JSON-LD, chunk-level self-containment |
-| `docs-lint-setup` | Scaffold `.vale.ini` + `.markdownlint.jsonc`, seed the Vale vocabulary, gitignore `styles/`; never overwrites an existing config unprompted |
+| `docs-lint-setup` | Scaffold `.vale.ini`, seed the Vale vocabulary, gitignore `styles/`; never overwrites an existing config unprompted |
 
 ### Agents (2, report-only)
 
@@ -88,7 +90,7 @@ Scope is the **human-facing prose and content layer**. Deliberately **not** in s
 ### Hooks
 
 - **SessionStart** — detects a docs/content workspace (a generated-site config, a prose-linter config, or a `docs/`/`pages/`/`content/` tree containing Markdown) and prints one context line plus the skill and agent surface. A bare `README.md` deliberately does **not** trigger it.
-- **PostToolUse** (Claude Code) / **afterFileEdit** (Cursor) — after a `.md`/`.mdx`/`.markdown` edit, runs `vale` and `markdownlint` on that one file and prints the alerts. **Advisory: it never rewrites the file**, and it is **opt-in** — silent unless the repo carries its own linter config. Output is capped.
+- **PostToolUse** (Claude Code) / **afterFileEdit** (Cursor) — after a `.md`/`.mdx`/`.markdown` edit, runs `vale` on that one file and prints the alerts. **Advisory: it never rewrites the file**, and it is **opt-in** — silent unless the repo carries its own linter config. Output is capped.
 
 ## Development
 
@@ -151,6 +153,7 @@ Use feature branches and pull requests. Validation runs on every push/PR.
 - **Audit the published output, not the source.** A static site generator can drop a `<title>`, rewrite a link, absorb a heading into a theme partial, or omit a page entirely with **no build warning**. Source Markdown shows intent; only served HTML shows what a crawler sees. `seo-audit` and `seo-auditor` must state which they used and what they could not check — "no issues found" on an unbuilt site is a false statement.
 - **`--fix` edits source, never build output.** A fix applied in `site/` disappears on the next build. And never let a fix change a URL — that breaks every inbound link.
 - **Invalid JSON-LD is silently ignored.** A syntax error in structured data produces no visible symptom at all, so `ai-seo` parses it rather than eyeballing it.
+- **Vale is the only shipped linter.** Markdown structure is unenforced by design (see Domain Context). Resist re-adding a Node-based structural linter: it could not be verified on the maintainer's machine, and a tool this plugin cannot run is a tool it should not prescribe.
 - **Vale style-package rules drift.** `references/vale.ini` names rules from the `Google`, `write-good`, `alex`, and `proselint` packages. When a package renames or removes one, `vale` warns but **exits 0** — the disabled or escalated rule quietly stops applying. Re-check the named rules when bumping a package.
 - **A large first Vale run is normal — don't gut the config to silence it.** Triage by raising `MinAlertLevel` to `error`, fixing those, then stepping down. Disabling a rule needs a comment saying why, as the reference configs do.
 - **Inventories in this repo rot too.** The component tables in README.md and AGENTS.md, and the counts in them, must be verified against the tree before being edited. The plugin's own rule applies to the plugin's own docs.

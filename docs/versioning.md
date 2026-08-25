@@ -22,7 +22,7 @@ While on the `0.x` line, treat the plugin as pre-stable: a breaking change may s
 
 ## Coupling to external tooling
 
-The reference linter configs (`references/vale.ini`, `references/markdownlint.jsonc`) pin no tool version, but they do name **style packages** (`Google`, `write-good`, `alex`, `proselint`) whose rule sets change upstream. When a package renames or removes a rule the config disables or escalates, the config breaks silently — `vale` warns but exits 0 for an unknown rule name. Re-check the named rules when bumping a package, and treat a rule rename as a **patch** fix.
+The reference linter config (`references/vale.ini`) pins no tool version, but it does name **style packages** (`Google`, `write-good`, `alex`, `proselint`) whose rule sets change upstream. When a package renames or removes a rule the config disables or escalates, the config breaks silently — `vale` warns but exits 0 for an unknown rule name. Re-check the named rules when bumping a package, and treat a rule rename as a **patch** fix.
 
 ## No MCP or marketplace coupling
 

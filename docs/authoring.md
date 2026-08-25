@@ -26,7 +26,7 @@ For skills the `description` is always-on metadata: keep it lean and third perso
 - **Cite the references; do not re-derive them.** The single source of truth for the rules is `references/`: `claims-and-evidence.md` (the hard rule), `style-guide.md`, `doc-types.md`, `seo-checklist.md`. A skill body states *its procedure* and points at the canonical reference for the rules. This keeps skills lean and the rules in one place — when a rule changes, one file changes.
 - **`references/` is plugin-root-relative.** A bare `references/x.md` inside `skills/<name>/SKILL.md` is two levels off, so every component carries the one-line resolution note (`${CLAUDE_PLUGIN_ROOT}/references/…`, `../../references/…`, or Glob). The validator checks that every cited reference exists; it cannot check that a reader resolves the path, which is why the note is mandatory.
 - **The repo being worked on outranks this plugin.** Every skill instructs reading the target repo's `AGENTS.md` / style guide / linter config first, and treats a conflict as the repo's win, reported rather than silently overridden.
-- **Deterministic beats prose.** Where `vale` or `markdownlint` enforces a rule, the skill runs the tool and reports its real output. A skill must never claim a clean lint it did not run.
+- **Deterministic beats prose.** Where `vale` enforces a rule, the skill runs the tool and reports its real output. Markdown structure has no shipped enforcer — do not write guidance implying one. A skill must never claim a clean lint it did not run.
 - **Verification is part of the skill.** A skill that lands prose runs the linters, checks the links, and runs the commands it wrote into the doc — then reports what it actually did and what it could not check.
 
 ## The audience boundary

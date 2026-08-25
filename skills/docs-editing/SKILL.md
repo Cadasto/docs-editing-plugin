@@ -14,13 +14,13 @@ Three principles drive every route:
 
 - **Evidence before persuasion.** A claim that cannot be traced to a source does not ship. This is the plugin's hard rule and it outranks every stylistic preference — `references/claims-and-evidence.md`.
 - **Decide the document kind first.** Most bad documentation is two kinds of document in one file. Pick the kind, then write only that kind — `references/doc-types.md`.
-- **Deterministic beats prose.** Whatever `vale` or `markdownlint` enforces, run the tool rather than reasoning it out by hand. Scaffold both with `/docs-lint-setup`.
+- **Deterministic beats prose.** Whatever `vale` enforces, run the tool rather than reasoning it out by hand. Scaffold it with `/docs-lint-setup`. Markdown *structure* has no shipped enforcer — apply `references/style-guide.md` §6 by judgment.
 
 ## Routing table
 
 | The task | Run now (deterministic) | Skill that owns it |
 |---|---|---|
-| Write new docs — README, guide, reference, tutorial | `markdownlint-cli2` on the result | `technical-writing` |
+| Write new docs — README, guide, reference, tutorial | `vale` on the result | `technical-writing` |
 | Tighten, review, or restructure existing prose | `vale .` on the file | `copy-editing` |
 | Landing page, feature page, positioning, announcement | `vale .` | `marketing-copy` |
 | Titles, metadata, headings, links, sitemap, crawlability | fetch the **published** page | `seo-audit` |
@@ -36,7 +36,7 @@ A consuming repository's instructions outrank this plugin. Before writing or edi
 
 1. **`AGENTS.md` / `CLAUDE.md`** — especially a named **ground-truth source** for domain facts, and any public-safety or "do not duplicate" constraint. Read these; they are never edit targets (see Scope).
 2. **A repo style guide or `CONTRIBUTING.md`** — if it sets voice, spelling, or terminology, it wins over `references/style-guide.md`.
-3. **`.vale.ini` / `.markdownlint*`** — the repo's own enforced rules. Run them; do not argue with them.
+3. **`.vale.ini`, or any linter config the repo ships** — its own enforced rules. Run them; do not argue with them.
 4. **Existing neighbouring pages** — match their structure and terminology. Consistency beats improvement in isolation.
 
 ## Refusals worth making
