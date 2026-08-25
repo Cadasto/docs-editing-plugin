@@ -1,6 +1,7 @@
 ---
 name: docs-editing
 description: Documentation and content router — technical writing, copy editing, marketing copy, SEO, and AI citability. This skill should be used when a prose task spans several of those areas, is unspecified, or the question is which standard applies — it routes to the focused skill that owns it (technical-writing, copy-editing, marketing-copy, seo-audit, ai-seo). Also the entry point for "improve these docs", "review this page", or "what should this document be?". For one already-identified task load that skill directly. Not for source-code review or domain facts.
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # docs-editing — documentation and content router
@@ -62,5 +63,5 @@ Does **not** own:
 
 For a context-isolated pass, dispatch rather than inlining:
 
-- **`prose-reviewer`** — read-only review of a document or page set: claim violations, doc-kind bleed, terminology drift, structure, style. Returns ranked findings.
-- **`seo-auditor`** — read-only discoverability and citability audit over a docs tree or published site.
+- **`prose-reviewer`** — report-only review of a document or page set: claim violations, doc-kind bleed, terminology drift, structure, style. Returns ranked findings.
+- **`seo-auditor`** — report-only discoverability and citability audit over a docs tree or published site.

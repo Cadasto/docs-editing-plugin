@@ -2,7 +2,7 @@
 name: marketing-copy
 description: Writing new marketing and positioning copy. This skill should be used when the user asks to "write the landing page", "write feature/product copy", "position this", "write the announcement or release post", "write the tagline / hero section", or "make the pitch clearer" — it writes benefit-led copy for technical audiences with every claim grounded in a verifiable mechanism. Not for documentation (technical-writing), editing existing prose (copy-editing), or metadata and discoverability (seo-audit).
 argument-hint: "<what to position> [page kind: hero | feature | announcement | one-pager]"
-allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---
 
 # marketing-copy — positioning and page copy
