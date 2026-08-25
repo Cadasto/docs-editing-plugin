@@ -21,13 +21,14 @@ Generic, shared with the sibling Cadasto plugins:
 - Hook-config JSON validity, **and** that every hook script it names exists and is executable.
 - Skill / agent / rule frontmatter: required keys, `name` matching the directory or filename stem, and the unquoted-`': '` YAML trap that silently drops all metadata. **Agents must declare `tools:`, never `allowed-tools:`** — flagged as an error.
 
-Three invariants specific to this plugin, each guarding a drift class this repo is genuinely exposed to:
+Four invariants specific to this plugin, each guarding a drift class this repo is genuinely exposed to:
 
 - **Reference resolution** — every `references/<file>` cited by a skill or agent body exists, and the reference files' own relative links resolve. The bundled `references/` sit at the **plugin root** while a citing skill sits two levels down, so a stale path fails silently at load time and the component improvises rules instead of grounding in them. This is the single most damaging failure mode for a plugin whose value is its cited rules.
 - **Markdown links and anchors** — every *relative* link in every `.md`/`.mdc` file resolves, and every `#anchor` it targets matches a heading in the destination (GitHub slug rules, including the `-1` suffix for duplicate headings). Link syntax inside code fences and inline code spans is skipped, because there it is illustrative rather than a link. External links are deliberately **not** fetched — that needs network and would make the validator flaky; see [versioning.md](versioning.md#coupling-to-external-tooling) for the external drift that stays unmonitored. Internal link rot is exactly the defect this plugin tells other repositories to fix, so it is checked here rather than trusted.
+- **Tool grants** — two advice-vs-capability checks, both added after this repo shipped the defects they catch. A component whose body prescribes a shell command (a shell-tagged fence, or an inline `vale`/`markdownlint`/`curl` invocation) must declare `Bash`; otherwise the instruction cannot be followed without a permission prompt its sibling components avoid. And an agent must not declare `Write`/`Edit`, nor describe itself as "read-only" while holding a write-capable tool — `Bash` counts, since `sed -i` and `>` write. Agents here are **report-only**: a contract their bodies keep, not a sandbox that keeps it for them, and the docs must not claim otherwise.
 - **Doc sync** — every worker skill and every agent is named both in the `docs-editing` router's body and in `hooks/session-start.sh`. A component that exists but is not routed to is unreachable in practice, and the session-start line is what tells a user it exists.
 
-All three are negative-tested: adding a component without wiring it in, citing a missing reference, or writing a dead link or bad anchor fails the validator.
+All four are negative-tested: adding a component without wiring it in, citing a missing reference, writing a dead link or bad anchor, prescribing a shell command without declaring `Bash`, or calling an agent "read-only" while it holds `Bash`, each fails the validator.
 
 ## Local triggering tests
 

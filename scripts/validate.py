@@ -25,6 +25,9 @@ Plugin-specific invariants (the drift classes this repo is actually exposed to):
     is the failure this plugin tells other repos to fix, so leaving it unchecked here would
     be embarrassing as well as wrong. External (http/https/mailto) links are deliberately
     NOT fetched -- that needs network and would make the validator flaky.
+  * TOOL GRANTS -- a component whose body prescribes a shell command must declare ``Bash``,
+    and an agent must neither declare a write tool nor call itself "read-only" while holding
+    a write-capable one (``Bash`` included). Both guard defects this repo actually shipped.
   * DOC SYNC -- every worker skill and every agent is named in the ``docs-editing`` router's
     body AND in ``hooks/session-start.sh``. Adding a skill without wiring it into the router
     and the session-start surface is the drift this repo will hit first, and nothing else
@@ -334,6 +337,94 @@ def validate_markdown_links():
                     err(f"{rel}: anchor '#{frag}' has no matching heading in '{path_part}'")
 
 
+def _declared_tools(front: str):
+    """Tool names from a component's frontmatter, handling both the agent block-list form
+    (`tools:\n  - Read`) and the skill inline form (`allowed-tools: Read, Bash`)."""
+    tools = set()
+    for key in ("tools", "allowed-tools"):
+        m = re.search(rf"^{key}:[ \t]*(.*)$", front, re.MULTILINE)
+        if not m:
+            continue
+        inline = m.group(1).strip()
+        if inline:
+            tools |= {x.strip() for x in inline.split(",") if x.strip()}
+            continue
+        # Block list: consume following `  - Name` lines.
+        for line in front[m.end():].splitlines():
+            item = re.match(r"^[ \t]+-[ \t]*(\S+)", line)
+            if item:
+                tools.add(item.group(1).strip())
+            elif line.strip():
+                break
+    return tools
+
+
+# Tools that can modify the filesystem. `Bash` counts: `sed -i`, `>` and `rm` all write.
+WRITE_CAPABLE_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit", "Bash"}
+# An agent in this plugin reports; it never edits. These are rejected outright.
+FORBIDDEN_AGENT_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
+# How a component self-describes as read-only. Deliberately specific, so the legitimate
+# phrase "read-only commands" (a non-mutating shell command) does not trip it.
+READONLY_CLAIM_RE = re.compile(
+    r"\bread-only\s+(?:specialist|agent|reviewer|auditor|review|sweep|audit)\b"
+    r"|\b(?:is|are|both)\s+read-only\b|(?:^|[.;])\s*Read-only[;:,]",
+    re.IGNORECASE | re.MULTILINE,
+)
+# Shell usage a body PRESCRIBES: a shell-tagged fence, or an inline span starting with one
+# of the CLIs this plugin actually tells the assistant to run.
+SHELL_FENCE_RE = re.compile(r"^(?:```+|~~~+)(?:bash|sh|shell|console|zsh)\b", re.MULTILINE)
+PRESCRIBED_CLI_RE = re.compile(r"`(vale|markdownlint|markdownlint-cli2|curl)\b[^`]*`")
+
+
+def validate_tool_grants():
+    """Two advice-vs-capability invariants, each guarding a defect this repo actually shipped.
+
+    * A component whose body PRESCRIBES a shell command must declare ``Bash``. Otherwise the
+      instruction cannot be followed without a permission prompt the sibling components avoid
+      -- `marketing-copy` told the assistant to run `vale` while declaring no ``Bash``.
+    * An agent must not declare a write-capable tool beyond ``Bash``, and must not call itself
+      "read-only" while holding one. ``Bash`` is write-capable, so an agent that runs linters
+      keeps its no-edit promise by contract, not by sandbox -- claiming "read-only" in the docs
+      would assert a guarantee the tool grant does not provide.
+    """
+    components = []
+    for skill_md in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        components.append((skill_md, False))
+    for agent_md in sorted((ROOT / "agents").glob("*.md")):
+        components.append((agent_md, True))
+
+    for path, is_agent in components:
+        rel = path.relative_to(ROOT)
+        front, body = split_frontmatter(path.read_text())
+        if front is None:
+            continue
+        tools = _declared_tools(front)
+
+        # -- advice == capability -------------------------------------------------
+        stripped_for_fence = body  # fences are the signal here, so do NOT strip them
+        prescribes_shell = bool(SHELL_FENCE_RE.search(stripped_for_fence)
+                                or PRESCRIBED_CLI_RE.search(body))
+        if prescribes_shell and "Bash" not in tools:
+            key = "tools" if is_agent else "allowed-tools"
+            err(f"{rel}: body prescribes a shell command but '{key}' does not include 'Bash' "
+                f"-- declare it, or stop instructing the command")
+
+        if not is_agent:
+            continue
+
+        # -- agents report, never edit --------------------------------------------
+        forbidden = sorted(tools & FORBIDDEN_AGENT_TOOLS)
+        if forbidden:
+            err(f"{rel}: agent declares write-capable tool(s) {forbidden} -- agents in this "
+                f"plugin report and never edit")
+
+        claim = READONLY_CLAIM_RE.search(front + "\n" + body)
+        if claim and (tools & WRITE_CAPABLE_TOOLS):
+            held = sorted(tools & WRITE_CAPABLE_TOOLS)
+            err(f"{rel}: describes itself as 'read-only' but declares {held}, which can modify "
+                f"files -- say 'report-only' (a contract) rather than 'read-only' (a guarantee)")
+
+
 def validate_doc_sync():
     """Every worker skill and agent must be named in the router skill's body AND in
     hooks/session-start.sh. A component that exists but is not routed to is unreachable in
@@ -406,6 +497,7 @@ def main():
     validate_rules()
     validate_reference_citations()
     validate_markdown_links()
+    validate_tool_grants()
     validate_doc_sync()
 
 
@@ -418,4 +510,4 @@ if __name__ == "__main__":
         sys.exit(1)
     print("OK: manifests, dual-host parity, component paths, kebab-case names, hook configs "
           "and scripts, skills, agents, rules, reference citations, markdown links/anchors, "
-          "and doc sync are valid")
+          "tool grants, and doc sync are valid")
