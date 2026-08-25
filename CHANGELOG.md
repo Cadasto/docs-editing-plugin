@@ -7,6 +7,18 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
+## [Unreleased]
+
+### Fixed
+- Skills: `marketing-copy` prescribed `vale` in its pre-handover self-check while declaring no `Bash` in `allowed-tools`, so the instruction could not be followed without a permission prompt its sibling skills avoid.
+- Agents, docs: `prose-reviewer` and `seo-auditor` were described as **read-only** in their own bodies, the README, `AGENTS.md` and the release notes while declaring `Bash`, which is write-capable. Both are now **report-only** — no `Write`/`Edit` in the tool grant, and no-edit stated as a contract the body keeps rather than a sandbox that enforces it.
+
+### Added
+- Validation: tool-grant invariants — a component whose body prescribes a shell command must declare `Bash`; an agent must not declare `Write`/`Edit`, nor call itself "read-only" while holding a write-capable tool. Both are negative-tested against the defects above.
+
+### Changed
+- Skills: the `docs-editing` router declares `allowed-tools: Read, Grep, Glob, Bash`, matching the deterministic checks its routing table tells the assistant to run.
+
 ## [0.1.0] - 2026-08-25
 
 First build — a dual-host (Claude Code + Cursor) documentation, editing, and content surface. Pure Markdown + JSON, stack-agnostic, no MCP backend. Scope is human-facing prose; agent-instruction files (`AGENTS.md`, `CLAUDE.md`, rules) are read for conventions, never authored.
@@ -25,8 +37,8 @@ First build — a dual-host (Claude Code + Cursor) documentation, editing, and c
 - Skills: `seo-audit` — technical and on-page audit of the published output, ranked by reader impact with an honest coverage statement; `--fix` edits source, never build output.
 - Skills: `ai-seo` — citability by AI search; `llms.txt` currency against the nav, Markdown twins, validated JSON-LD, chunk-level self-containment.
 - Skills: `docs-lint-setup` — scaffold `.vale.ini` + `.markdownlint.jsonc`, seed the Vale vocabulary, gitignore `styles/`; never overwrites an existing config unprompted.
-- Agents: `prose-reviewer` — read-only prose review for what linters cannot see (unsourced/hedged claims, capability claimed but not shipped, stale inventories, merged document kinds, terminology drift); ranked findings plus an explicit coverage statement.
-- Agents: `seo-auditor` — read-only discoverability sweep over a docs tree or live site; audits published output by preference and states its coverage.
+- Agents: `prose-reviewer` — report-only prose review for what linters cannot see (unsourced/hedged claims, capability claimed but not shipped, stale inventories, merged document kinds, terminology drift); ranked findings plus an explicit coverage statement.
+- Agents: `seo-auditor` — report-only discoverability sweep over a docs tree or live site; audits published output by preference and states its coverage.
 - Hooks: `session-start.sh` — detects a docs/content workspace and prints one standards line plus the surface; a bare `README.md` deliberately does not trigger it. Dual-host.
 - Hooks: `prose-lint-on-save.sh` — reports `vale`/`markdownlint` alerts for the just-edited Markdown file. Advisory (never rewrites), opt-in on the repo's own linter config, output capped, always exits 0. Dual-host.
 - Cursor rule: `rules/docs-editing-context.mdc` — Markdown- and docs-scoped guidance mirroring the router.
