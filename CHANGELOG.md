@@ -9,6 +9,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Fixed
+- Docs: `docs/versioning.md`, `AGENTS.md` claimed `vale` "warns but exits 0" for an unknown rule name. It does not warn — an unknown rule yields **empty stderr and exit 0**, which is what makes the drift dangerous, so the gotcha undercut its own point. An unknown *style package* is the loud case (`E100 [loadStyles]`, exit 2). Verified against Vale 3.18.0.
+
 ### Changed
 - Docs: `docs/versioning.md`, `AGENTS.md` — the `cadasto` catalog pins each entry to a release tag, so a tag here ships nothing until the entry's `version` and `source.ref` move. Repinning is now release step 8.
 

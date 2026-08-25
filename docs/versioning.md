@@ -23,7 +23,7 @@ While on the `0.x` line, treat the plugin as pre-stable: a breaking change may s
 
 ## Coupling to external tooling
 
-The reference linter config (`references/vale.ini`) pins no tool version, but it does name **style packages** (`Google`, `write-good`, `alex`, `proselint`) whose rule sets change upstream. When a package renames or removes a rule the config disables or escalates, the config breaks silently — `vale` warns but exits 0 for an unknown rule name. Re-check the named rules when bumping a package, and treat a rule rename as a **patch** fix.
+The reference linter config (`references/vale.ini`) pins no tool version, but it does name **style packages** (`Google`, `write-good`, `alex`, `proselint`) whose rule sets change upstream. When a package renames or removes a rule the config disables or escalates, the config breaks **silently**: an unknown rule name produces no warning at all — empty stderr, exit 0 — so the escalation or suppression quietly stops applying. An unknown *style package* is the opposite, failing loudly with `E100 [loadStyles]` and exit 2, so a broken `Packages =` line is caught for you and a broken rule line is not. Re-check the named rules by hand when bumping a package, and treat a rule rename as a **patch** fix. (Verified against Vale 3.18.0.)
 
 ## No MCP coupling
 
