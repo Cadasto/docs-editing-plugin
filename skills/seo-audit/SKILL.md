@@ -1,6 +1,6 @@
 ---
 name: seo-audit
-description: Technical and on-page SEO auditing. This skill should be used when the user asks to "run an SEO audit", "check the site's SEO", "fix titles and meta descriptions", "check headings / internal links / sitemap / robots.txt", "why isn't this page indexed?", or "check for duplicate or orphan pages" — it audits the published output and reports findings ranked by reader impact. Not for AI citability, llms.txt, or structured data (ai-seo), nor for writing the copy itself (marketing-copy, technical-writing).
+description: Use when asked about search-engine visibility — "run an SEO audit", "fix titles and meta descriptions", "check headings, internal links, sitemap, robots.txt", "why isn't this page indexed?", "find duplicate or orphan pages". Classic SEO, not AI citability (ai-seo).
 argument-hint: "<site URL, built output dir, or page path> [--fix]"
 allowed-tools: Read, Edit, Glob, Grep, Bash, WebFetch
 ---

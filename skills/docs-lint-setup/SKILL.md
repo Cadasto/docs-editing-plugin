@@ -1,6 +1,6 @@
 ---
 name: docs-lint-setup
-description: Scaffold Vale prose linting into a repository. This skill should be used when the user runs `/docs-lint-setup` or asks to "set up Vale", "add prose linting", "bootstrap the docs linter", "add a prose lint CI job", or "why is Vale so noisy?" — it writes the plugin's reference `.vale.ini`, seeds the vocabulary, and will not overwrite an existing config unprompted. For what the rules mean, use `copy-editing` or `references/style-guide.md`. Not for Markdown structure linting, which this plugin does not ship, nor for non-prose linting.
+description: Use when asked to "set up Vale", "add prose linting", "bootstrap the docs linter", "add a prose-lint CI job", or "why is Vale so noisy?". Writes .vale.ini and seeds the vocabulary; never overwrites an existing config unprompted.
 argument-hint: "[target dir] [--ci] [--force]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---

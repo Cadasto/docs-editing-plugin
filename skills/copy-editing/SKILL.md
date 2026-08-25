@@ -1,6 +1,6 @@
 ---
 name: copy-editing
-description: Reviewing and tightening existing prose. This skill should be used when the user asks to "edit this", "tighten this copy", "review this page/doc", "make this clearer", "proofread", "cut this down", "fix the tone", or "why does this read badly?" — it line-edits to the house style, flags unsupported claims, and reports what changed and why. Not for drafting new documentation (technical-writing), writing new landing copy (marketing-copy), or metadata and discoverability (seo-audit).
+description: Use when asked to improve prose that already exists — "edit this", "tighten this", "review this page", "proofread", "cut this down", "fix the tone", "why does this read badly?". Line-edits to house style and flags unsupported claims. Editing, not drafting (technical-writing).
 argument-hint: "<file, page, or pasted prose> [--report-only]"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---

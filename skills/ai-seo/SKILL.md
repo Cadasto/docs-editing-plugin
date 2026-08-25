@@ -1,6 +1,6 @@
 ---
 name: ai-seo
-description: Making content citable by AI search and retrieval systems. This skill should be used when the user asks to "add or update llms.txt", "make this site citable by AI / LLMs", "add structured data / JSON-LD / schema.org markup", "serve Markdown twins", "optimise for AI search or RAG retrieval", or "why does the AI summarise our docs wrongly?" — it audits and improves machine-readability and attribution. Not for classic search SEO — titles, sitemaps, crawlability (seo-audit) — nor for writing the copy (technical-writing, marketing-copy).
+description: Use when asked to make content citable by AI systems — "add or update llms.txt", "add JSON-LD or schema.org markup", "serve Markdown twins", "optimise for AI search or RAG retrieval", "why does the AI summarise our docs wrongly?". Not classic search SEO (seo-audit).
 argument-hint: "<site URL, built output dir, or docs tree> [llms.txt | structured-data | twins]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---

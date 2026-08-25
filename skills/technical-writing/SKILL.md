@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: Authoring new technical documentation. This skill should be used when the user asks to "write documentation", "write a README", "document this feature/API", "write a how-to / tutorial / reference page", "structure the docs", "write release notes / a changelog entry", or "what should this document contain?" — it picks the document kind, drafts to the house style, and grounds every claim. Not for editing existing prose (copy-editing), landing/marketing pages (marketing-copy), or discoverability (seo-audit).
+description: Use when asked to write documentation — "write a README", "document this API or feature", "write a how-to, tutorial, or reference page", "write release notes or a changelog entry", "structure the docs", "what should this document contain?". New docs; editing existing prose is copy-editing.
 argument-hint: "<what to document> [target file or doc kind]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
