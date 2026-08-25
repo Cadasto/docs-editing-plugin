@@ -1,0 +1,36 @@
+---
+description: Documentation and content standards — every claim traceable to a source (never invent statistics, testimonials, or superlatives); one document kind per file; run vale and markdownlint rather than reasoning style out by hand. Mirrors the docs-editing router skill for Cursor.
+globs: ["**/*.md", "**/*.mdx", "**/*.markdown", "docs/**", "pages/**", "content/**", "llms.txt"]
+alwaysApply: false
+---
+
+# Documentation and content standards
+
+Apply when writing or editing **prose intended for people** — documentation, guides, references, page and marketing copy, changelogs, release notes, site metadata. **Read the repo's own `AGENTS.md` / style guide / `CONTRIBUTING.md` first — its conventions outrank these defaults**, especially a named ground-truth source for domain facts.
+
+**Out of scope: agent-instruction files** — `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `rules/*.mdc`, `.github/copilot-instructions.md`, and skill or agent definitions. Read them for conventions; do not rewrite them here. They address a model rather than a reader, so rules below invert: repetition is deliberate, hard constraints stay hard, and rigid parallel structure is a feature.
+
+## The hard rule
+
+**A claim that cannot be traced to a source does not ship.** Never originate statistics, benchmarks, user or customer counts, testimonials, named customers, awards, endorsements, urgency devices, or comparative superlatives. Hedging is not a fix — "up to", "designed to", "teams report" preserve the violation. Replace the invented outcome with the **observable mechanism**, which is also more persuasive to a technical reader:
+
+> ❌ "Cuts review time by 40%."
+> ✅ "Flags unsourced statistics, doc-kind bleed, and stale inventories."
+
+State maturity plainly (`shipped` / `experimental` / `planned` / `deprecated`) and verify every count, component table, and feature list against the tree — inventories rot fastest. Domain facts come from the repo's named ground-truth source, never from memory.
+
+## One document kind per file
+
+Decide before the first sentence: **tutorial** (one path, no branches, works verbatim), **how-to** (one goal, assumes competence), **reference** (exhaustive, indicative, mirrors the code, no narrative), **explanation** (context and trade-offs — the only kind that may argue). Most bad documentation is two kinds in one file. If the answer is "both", that is two documents.
+
+## Style essentials
+
+Answer first — the conclusion, command, or definition opens each section; background never precedes it. Active voice, present tense, one idea per sentence. Cut "simply", "just", "obviously", "very", "seamlessly", "powerful", "robust". Sentence-case headings, one `h1`, language-tagged fences with no `$` prompt. Link the noun, never "click here". Cross-reference rather than duplicate — one home per fact. Sections must stand alone: a reader arriving at an `h2` acts without reading upward (this also determines whether AI retrieval can use the chunk).
+
+## Run the tools
+
+Whatever `vale` and `markdownlint` enforce, run them rather than reasoning it out. The repo's own `.vale.ini` / `.markdownlint*` win; `/docs-lint-setup` scaffolds them if absent.
+
+## Skills
+
+`/technical-writing` (author docs) · `/copy-editing` (tighten existing prose) · `/marketing-copy` (landing and positioning) · `/seo-audit` (titles, metadata, links, crawlability) · `/ai-seo` (`llms.txt`, structured data, citability) · `/docs-lint-setup`. Agents: `prose-reviewer`, `seo-auditor`. For the full rules use the `docs-editing` router skill and the plugin's `references/`.
