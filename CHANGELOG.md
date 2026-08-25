@@ -7,7 +7,9 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
-## [Unreleased]
+## [0.3.0] - 2026-08-25
+
+Makes the shipped Vale setup usable out of the box — a seeded vocabulary, two false-positive rules turned off, and a vocabulary name that is not an organisation's — and corrects three claims this repo's own docs made about tooling it had not run.
 
 ### Added
 - References: `references/vocab-accept.txt` — a seed Vale vocabulary of technical jargon (`repo`, `config`, `frontmatter`, `validator`, `stderr`, `citability`, `crawlability`, …). Entries are case-tolerant regexes (`[Cc]onfigs?`) because `Vale.Terms` demands a term appear exactly as listed: a bare lowercase entry silences the spelling warning and then reports every sentence-initial capital instead. Product names are listed with their exact capitalisation on purpose, so that rule enforces them. Deliberately excludes British/American spelling pairs — Vale's dictionary accepts both. Verified against Vale 3.18.0.
