@@ -7,6 +7,11 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
+## [Unreleased]
+
+### Changed
+- Docs: `docs/versioning.md`, `AGENTS.md` — the `cadasto` catalog pins each entry to a release tag, so a tag here ships nothing until the entry's `version` and `source.ref` move. Repinning is now release step 8.
+
 ## [0.2.0] - 2026-08-25
 
 Tightens the plugin to a single prose linter and makes its always-on surface cheap: markdownlint is gone, the agents are honestly described as report-only, and every skill description is rewritten for the skill-listing budget.
