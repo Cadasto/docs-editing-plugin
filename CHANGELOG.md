@@ -7,27 +7,27 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
-## [Unreleased]
+## [0.2.0] - 2026-08-25
 
-### Fixed
-- Skills: `marketing-copy` prescribed `vale` in its pre-handover self-check while declaring no `Bash` in `allowed-tools`, so the instruction could not be followed without a permission prompt its sibling skills avoid.
-- Docs: the local install command was `claude plugin add /path/to/docs-editing-plugin`, which **does not exist** — `claude plugin` prints its general help and exits 0 for an unknown subcommand, so the wrong command never failed visibly. Replaced with `claude --plugin-dir <path>` (session-scoped) in `README.md`, `docs/install.md`, `docs/versioning.md` and `AGENTS.md`, with the persistent-install route stated explicitly.
-- Agents, docs: `prose-reviewer` and `seo-auditor` were described as **read-only** in their own bodies, the README, `AGENTS.md` and the release notes while declaring `Bash`, which is write-capable. Both are now **report-only** — no `Write`/`Edit` in the tool grant, and no-edit stated as a contract the body keeps rather than a sandbox that enforces it.
+Tightens the plugin to a single prose linter and makes its always-on surface cheap: markdownlint is gone, the agents are honestly described as report-only, and every skill description is rewritten for the skill-listing budget.
 
-### Removed
-- Dropped the **markdownlint** integration entirely: deleted `references/markdownlint.jsonc`, removed the tool from `docs-lint-setup` (now Vale-only), `copy-editing`, `technical-writing`, the `docs-editing` router, `prose-reviewer`, the Cursor rule, and both hooks. It required a Node toolchain that could not be verified, and prescribing an unrunnable tool contradicts the plugin's own advice-equals-tooling principle.
+### Added
+- Validation: tool-grant invariants — a component whose body prescribes a shell command must declare `Bash`; an agent must not declare `Write`/`Edit`, nor call itself "read-only" while holding a write-capable tool. Both are negative-tested against the defects recorded under Fixed.
 
 ### Changed
 - Skills: all seven skill `description` fields rewritten for the skill-listing budget — trigger phrases and sibling disambiguation kept, the name-restating lead-in and mechanism prose dropped. Total description weight falls from 3,635 to 1,861 characters (measured listing: 35,560 → 33,786), taking the plugin from 10.8% of the listing for 8.3% of the skills to 6.1%. Descriptions are dropped whole (the skill degrades to a bare name, not a truncated sentence) and never-used skills rank last, so length is the only lever a new plugin controls.
 - References: `style-guide.md` §6 (Markdown mechanics) no longer claims tool enforcement — those rules are conventions applied by judgment, and a consuming repo's own structural linter takes precedence.
 - Hooks: `prose-lint-on-save.sh` is Vale-only and opt-in on `.vale.ini` alone; `session-start.sh` no longer treats a markdownlint config as a docs-workspace signal.
 - Docs: `docs/install.md` records Vale's exit codes (`0` clean, `1` findings, `2` config error) and that the release binary is the working install route — `go install` fails to build.
-
-### Added
-- Validation: tool-grant invariants — a component whose body prescribes a shell command must declare `Bash`; an agent must not declare `Write`/`Edit`, nor call itself "read-only" while holding a write-capable tool. Both are negative-tested against the defects above.
-
-### Changed
 - Skills: the `docs-editing` router declares `allowed-tools: Read, Grep, Glob, Bash`, matching the deterministic checks its routing table tells the assistant to run.
+
+### Removed
+- Dropped the **markdownlint** integration entirely: deleted `references/markdownlint.jsonc`, removed the tool from `docs-lint-setup` (now Vale-only), `copy-editing`, `technical-writing`, the `docs-editing` router, `prose-reviewer`, the Cursor rule, and both hooks. It required a Node toolchain that could not be verified, and prescribing an unrunnable tool contradicts the plugin's own advice-equals-tooling principle.
+
+### Fixed
+- Skills: `marketing-copy` prescribed `vale` in its pre-handover self-check while declaring no `Bash` in `allowed-tools`, so the instruction could not be followed without a permission prompt its sibling skills avoid.
+- Docs: the local install command was `claude plugin add /path/to/docs-editing-plugin`, which **does not exist** — `claude plugin` prints its general help and exits 0 for an unknown subcommand, so the wrong command never failed visibly. Replaced with `claude --plugin-dir <path>` (session-scoped) in `README.md`, `docs/install.md`, `docs/versioning.md` and `AGENTS.md`, with the persistent-install route stated explicitly.
+- Agents, docs: `prose-reviewer` and `seo-auditor` were described as **read-only** in their own bodies, the README, `AGENTS.md` and the release notes while declaring `Bash`, which is write-capable. Both are now **report-only** — no `Write`/`Edit` in the tool grant, and no-edit stated as a contract the body keeps rather than a sandbox that enforces it.
 
 ## [0.1.0] - 2026-08-25
 
