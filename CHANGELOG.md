@@ -1,13 +1,21 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are recorded in this file.
 
-The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
-
-- Keep a Changelog: https://keepachangelog.com/en/1.1.0/
-- Semantic Versioning: https://semver.org/spec/v2.0.0.html
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
+- Docs: `README.md` gains a badge row, a requirements paragraph, a table of contents and a `Features` list; `Install` and `Component surface` become `Installation` and `Components`, and the scope section folds into the intro and `How it decides`.
+- Docs: `README.md` links the validator's four plugin-specific invariants in `docs/testing.md` instead of restating them.
+- Docs: each `docs/` page opens with a paragraph naming its reader and purpose.
+- Docs: `docs/testing.md` adds a `/humanize` smoke test and checks that `/docs-lint-setup` copies the `ai-tells` style.
+- Docs: `docs/versioning.md` adds a release step to update the README version badge.
+
+### Fixed
+- Docs: `docs/install.md` no longer lists `go install` as a Vale install route, and names one prose linter instead of two.
+- Docs: `docs/testing.md` says to load a working copy with `--plugin-dir`, not install it.
 
 ## [0.4.0] - 2026-09-24
 
