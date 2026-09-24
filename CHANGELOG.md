@@ -9,6 +9,10 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-24
+
+Adds `/humanize` and the `ai-tells` catalogue and Vale style, and makes the house style em-dash free: the assistant writes none, a human author's deliberate dash is kept, and the plugin's own prose now follows the rule.
+
 ### Added
 - Skills: `humanize` removes AI tells from existing prose, with a `--report-only` mode that names patterns and never judges authorship.
 - References: `references/ai-tells.md`, the canonical catalogue of AI tells ranked by strength, with the house em-dash rule and the when-not-to-act list.
@@ -26,6 +30,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Agents: `prose-reviewer` reports AI tells in its style pass.
 - Hooks: `session-start.sh` announces `/humanize` and the em-dash rule.
 - Rules: `docs-editing-context.mdc` names `/humanize` and the em-dash rule.
+- Docs: em dashes removed from every skill, agent, reference, rule, doc, `README.md`, `AGENTS.md` and this changelog; lone `—` table cells in the router read `none`.
+- Manifests: `description` names AI-tell cleanup and uses a colon instead of an em dash.
 
 ## [0.3.0] - 2026-08-25
 
