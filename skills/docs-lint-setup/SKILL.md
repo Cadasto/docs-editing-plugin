@@ -5,13 +5,13 @@ argument-hint: "[target dir] [--ci] [--force]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
-# docs-lint-setup — scaffold Vale
+# docs-lint-setup: scaffold Vale
 
 Scaffold prose linting into **$ARGUMENTS** (default: the repo root).
 
-> **`references/…` paths resolve from the plugin root** (beside `skills/`, two levels up — not under this skill). Resolve host-agnostically: Glob for the installed copy is the reliable method; `${CLAUDE_PLUGIN_ROOT}` is available to hook and MCP command fields, not to tool calls.
+> **`references/…` paths resolve from the plugin root** (beside `skills/`, two levels up, not under this skill). Resolve host-agnostically: Glob for the installed copy is the reliable method; `${CLAUDE_PLUGIN_ROOT}` is available to hook and MCP command fields, not to tool calls.
 
-**[Vale](https://vale.sh)** is the enforcing tool for the mechanical half of `references/style-guide.md` — voice, hedges, weasel words, condescension, terminology. Config: `references/vale.ini` → `.vale.ini`.
+**[Vale](https://vale.sh)** is the enforcing tool for the mechanical half of `references/style-guide.md`: voice, hedges, weasel words, condescension, terminology. Config: `references/vale.ini` → `.vale.ini`.
 
 Vale checks **prose**, not Markdown structure. Heading nesting, fence language tags, and trailing whitespace are conventions applied by judgment here (`references/style-guide.md` §6); this plugin ships no structural linter. Where a repo already runs one, respect its config and do not replace it.
 
@@ -36,11 +36,11 @@ Vale checks **prose**, not Markdown structure. Heading nesting, fence language t
    touch "styles/config/vocabularies/$VOCAB/reject.txt"
    ```
 
-   A `Vocab` with no matching directory is a **hard error on the next lint** — `E100 [vocab] … vocabulary not found`, exit 2. `vale sync` does *not* catch it: it reports success and exits 0, so the config looks healthy until someone lints.
+   A `Vocab` with no matching directory is a **hard error on the next lint**: `E100 [vocab] … vocabulary not found`, exit 2. `vale sync` does *not* catch it: it reports success and exits 0, so the config looks healthy until someone lints.
 
-   **Copy the seed rather than creating an empty file.** `Vale.Spelling` uses a general dictionary, so an empty `accept.txt` buries every real style finding under jargon false positives — `repo`, `config`, `frontmatter`, `validator`. On this plugin's own tree that was 190 spelling alerts, against 11 once seeded. It does not need British and American spellings: Vale's dictionary accepts both.
+   **Copy the seed rather than creating an empty file.** `Vale.Spelling` uses a general dictionary, so an empty `accept.txt` buries every real style finding under jargon false positives: `repo`, `config`, `frontmatter`, `validator`. On this plugin's own tree that was 190 spelling alerts, against 11 once seeded. It does not need British and American spellings: Vale's dictionary accepts both.
 
-   Then **append the repo's own terms** — product names, domain vocabulary, and cited proper nouns — taken from prose already in the repo; do not invent terms. This is also what keeps naming fixed per `references/style-guide.md` §3. `reject.txt` holds banned vocabulary, so the linter catches marketing words instead of a reviewer.
+   Then **append the repo's own terms** (product names, domain vocabulary, and cited proper nouns), taken from prose already in the repo; do not invent terms. This is also what keeps naming fixed per `references/style-guide.md` §3. `reject.txt` holds banned vocabulary, so the linter catches marketing words instead of a reviewer.
 
 4. **Copy the `ai-tells` style.** It ships with the plugin, not as a downloadable package, so `vale sync` never fetches it (and leaves it in place):
 
@@ -71,13 +71,13 @@ Vale checks **prose**, not Markdown structure. Heading nesting, fence language t
    vale --minAlertLevel=error .   # errors only
    ```
 
-   Vale exits `0` clean, `1` on findings, `2` on a config error. If Vale is not installed, say so and stop after writing the config — do not report a passing lint. Install via the release binary from <https://github.com/vale-cli/vale/releases> (`go install` fails to build).
+   Vale exits `0` clean, `1` on findings, `2` on a config error. If Vale is not installed, say so and stop after writing the config; do not report a passing lint. Install via the release binary from <https://github.com/vale-cli/vale/releases> (`go install` fails to build).
 
 7. **Expect a loud first run, and do not gut the config to quiet it.** Triage in order: `--minAlertLevel=error` for a shippable baseline, fix those, then step down to `warning` and `suggestion`. Disable a rule only when it is genuinely wrong for the repo, with a comment saying why, as the reference config does.
 
-   `write-good.E-Prime` is reliably noisy on technical prose — it objects to every "is" — and is the first to reach for. Note that `Vale.Spelling` noise means the vocabulary is not seeded yet: fix it in step 3 rather than by disabling the rule, which is a genuine check.
+   `write-good.E-Prime` is reliably noisy on technical prose (it objects to every "is") and is the first to reach for. Note that `Vale.Spelling` noise means the vocabulary is not seeded yet: fix it in step 3 rather than by disabling the rule, which is a genuine check.
 
-8. **CI, with `--ci`.** Add a job running `vale --minAlertLevel=error` on pull requests. Match the repo's existing workflow style; pin the Vale version. Do not gate on the pre-existing backlog — scope to changed files, or land the baseline first.
+8. **CI, with `--ci`.** Add a job running `vale --minAlertLevel=error` on pull requests. Match the repo's existing workflow style; pin the Vale version. Do not gate on the pre-existing backlog; scope to changed files, or land the baseline first.
 
 ## Report
 

@@ -12,30 +12,30 @@ Classify every factual assertion before writing it. The class determines what is
 
 | Class | Example | Requirement |
 |---|---|---|
-| **Verifiable in-repo** | "The validator checks dual-host parity." | Point to the file/function. Read it first — do not infer from a filename. |
+| **Verifiable in-repo** | "The validator checks dual-host parity." | Point to the file/function. Read it first; do not infer from a filename. |
 | **Verifiable externally** | "RFC 2119 defines MUST and SHOULD." | Cite the source inline or in a footnote. Prefer primary sources over summaries. |
 | **Attributable opinion** | "The Go team considers formatting non-negotiable." | Name the holder of the opinion. Never launder an opinion into a fact. |
-| **Unsupported** | "Teams ship 40% faster." | **Do not write it.** No hedge rescues it — see §3. |
+| **Unsupported** | "Teams ship 40% faster." | **Do not write it.** No hedge rescues it; see §3. |
 
 ## 2. Never invent
 
 Never originate any of the following. If the user supplies them, use them as given and attribute them; if they are absent, the copy must work without them.
 
-- **Numbers** — percentages, benchmarks, user/customer/download counts, uptime figures, time-to-value, "N× faster".
-- **Social proof** — testimonials, quotes, named customers, logos, star ratings, review counts, awards, analyst placements.
-- **Endorsement** — implying a standards body, vendor, or person endorses the thing when they have not.
-- **Urgency and scarcity** — deadlines, "limited", "act now", countdowns, fake cohort sizes.
-- **Comparative superiority** — "the best", "the fastest", "the only", "industry-leading" — unless a cited, reproducible measurement backs the specific comparison.
-- **Roadmap as present tense** — describing planned or partial capability as shipped. Use the status vocabulary in §4.
+- **Numbers**: percentages, benchmarks, user/customer/download counts, uptime figures, time-to-value, "N× faster".
+- **Social proof**: testimonials, quotes, named customers, logos, star ratings, review counts, awards, analyst placements.
+- **Endorsement**: implying a standards body, vendor, or person endorses the thing when they have not.
+- **Urgency and scarcity**: deadlines, "limited", "act now", countdowns, fake cohort sizes.
+- **Comparative superiority**: "the best", "the fastest", "the only", "industry-leading", unless a cited, reproducible measurement backs the specific comparison.
+- **Roadmap as present tense**: describing planned or partial capability as shipped. Use the status vocabulary in §4.
 
 ## 3. Hedging is not a fix
 
 Softening an unsupported claim keeps the claim and adds evasion. These are all still violations:
 
-- "Teams report shipping faster" — which teams? reported where?
-- "Up to 40% faster" — an unmeasured ceiling is not a measurement.
-- "Designed to reduce onboarding time" — intent smuggled in as outcome.
-- "Trusted by developers worldwide" — unfalsifiable, therefore meaningless.
+- "Teams report shipping faster": which teams? reported where?
+- "Up to 40% faster": an unmeasured ceiling is not a measurement.
+- "Designed to reduce onboarding time": intent smuggled in as outcome.
+- "Trusted by developers worldwide": unfalsifiable, therefore meaningless.
 
 The repair is not a weaker verb. It is to **replace the invented outcome with the observable mechanism**:
 
@@ -50,7 +50,7 @@ State maturity plainly rather than blurring it. Use one word per component and k
 
 `shipped` · `experimental` · `planned` · `deprecated` · `removed`
 
-Do not describe a `planned` component in the present indicative. Do not let a README table claim `shipped` for something absent from the tree — verify against the tree before editing an inventory, because inventories rot faster than prose.
+Do not describe a `planned` component in the present indicative. Do not let a README table claim `shipped` for something absent from the tree; verify against the tree before editing an inventory, because inventories rot faster than prose.
 
 ## 5. Inventories rot
 
@@ -58,12 +58,12 @@ Any count, list, or table mirroring real repository contents ("7 skills", "two a
 
 ## 6. Audience calibration
 
-Growth-copy conventions and technical audiences are actively incompatible. Developers, clinicians, and engineers treat unsourced numbers as evidence of unseriousness — the copy pattern that raises conversion on a consumer landing page lowers it here. For technical audiences:
+Growth-copy conventions and technical audiences are actively incompatible. Developers, clinicians, and engineers treat unsourced numbers as evidence of unseriousness; the copy pattern that raises conversion on a consumer landing page lowers it here. For technical audiences:
 
 - Lead with **what it does**, not what the reader will feel.
 - Prefer a **code block, a command, or a concrete failure it catches** over an adjective.
 - Name the **limits and prerequisites** early. Stating what something does not do buys more trust than any superlative.
-- Let the reader **verify cheaply** — link the source, the spec, the file.
+- Let the reader **verify cheaply**: link the source, the spec, the file.
 
 ## 7. Domain ground truth
 

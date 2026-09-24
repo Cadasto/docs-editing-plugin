@@ -1,8 +1,8 @@
 # Document Kinds and Their Boundaries
 
-Most bad documentation is not badly written — it is **two kinds of document in one file**. A tutorial that stops to explain architecture loses the beginner; a reference page that tells a story cannot be scanned. Decide the kind first, then write only that kind.
+Most bad documentation is not badly written; it is **two kinds of document in one file**. A tutorial that stops to explain architecture loses the beginner; a reference page that tells a story cannot be scanned. Decide the kind first, then write only that kind.
 
-The four-kind split follows **Diátaxis** (Daniele Procida) — <https://diataxis.fr>. The repo-shape contracts in §2 are conventions rather than Diátaxis. All of it concerns prose written **for people**; §3 records what is deliberately out of scope.
+The four-kind split follows **Diátaxis** (Daniele Procida): <https://diataxis.fr>. The repo-shape contracts in §2 are conventions rather than Diátaxis. All of it concerns prose written **for people**; §3 records what is deliberately out of scope.
 
 ## 1. The four kinds
 
@@ -19,7 +19,7 @@ The four-kind split follows **Diátaxis** (Daniele Procida) — <https://diataxi
 ### Boundary rules
 
 - **A tutorial must work end to end, exactly as written.** No choices, no branches, no "depending on your setup". Pin versions. One path.
-- **A how-to assumes competence.** It solves one real problem and may branch. It does not teach fundamentals — it links to them.
+- **A how-to assumes competence.** It solves one real problem and may branch. It does not teach fundamentals; it links to them.
 - **Reference does not instruct.** It describes what is there: every parameter, every field, every error, every default. Its structure mirrors the code's structure so a reader can navigate by guessing. No opinions, no tutorials, no worked narratives.
 - **Explanation does not instruct either.** It supplies context, alternatives considered, trade-offs, history. It is the only kind allowed to argue.
 
@@ -40,22 +40,22 @@ These have fixed contracts in these repositories.
 
 The front door, for someone who has not decided yet. In order:
 
-1. **What it is**, in one or two sentences — the noun, the audience, the mechanism.
-2. **Install** — the shortest working path, copy-pasteable.
-3. **Component surface / what it does** — a table, verified against the tree.
-4. **Prerequisites** — what must already be on the host, and what happens without it.
-5. **Development** — how to validate and contribute, linked not inlined.
+1. **What it is**, in one or two sentences: the noun, the audience, the mechanism.
+2. **Install**: the shortest working path, copy-pasteable.
+3. **Component surface / what it does**: a table, verified against the tree.
+4. **Prerequisites**: what must already be on the host, and what happens without it.
+5. **Development**: how to validate and contribute, linked not inlined.
 6. **License.**
 
 A README is not a manual. When a section outgrows a screen, it becomes a page in `docs/` and the README links it.
 
 ### CHANGELOG.md
 
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format, [SemVer](https://semver.org). Entries accumulate under `## [Unreleased]` and fold into a dated `## [X.Y.Z] - YYYY-MM-DD` section at release. Groups in fixed order — **Added, Changed, Deprecated, Removed, Fixed, Security** — omitting empty ones. One line per bullet, leading with the subsystem, backticks around file/component names. **No rationale and no PR links** — those belong in the commit body and the PR. A changelog answers "what changed for me?", not "why did you do it?".
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format, [SemVer](https://semver.org). Entries accumulate under `## [Unreleased]` and fold into a dated `## [X.Y.Z] - YYYY-MM-DD` section at release. Groups in fixed order (**Added, Changed, Deprecated, Removed, Fixed, Security**), omitting empty ones. One line per bullet, leading with the subsystem, backticks around file/component names. **No rationale and no PR links**; those belong in the commit body and the PR. A changelog answers "what changed for me?", not "why did you do it?".
 
 ### Migration / upgrade notes
 
-Every breaking change gets: what broke, the exact error the reader will see, the mechanical fix, and — if one exists — the automated path. Order by likelihood of being hit, not by module.
+Every breaking change gets: what broke, the exact error the reader will see, the mechanical fix, and (if one exists) the automated path. Order by likelihood of being hit, not by module.
 
 ## 3. Not documentation: agent-instruction files
 
@@ -63,12 +63,12 @@ Every breaking change gets: what broke, the exact error the reader will see, the
 
 | Human-facing prose | Agent-instruction file |
 |---|---|
-| Cut repetition — say it once, link the rest | Repetition is deliberate; a rule stated once is a rule frequently missed |
+| Cut repetition: say it once, link the rest | Repetition is deliberate; a rule stated once is a rule frequently missed |
 | Prefer the shorter, softer verb | Hard constraints stay hard; "should" where "MUST" was meant changes behaviour |
 | Vary sentence structure for readability | Rigid, parallel structure is a feature |
 | Trim to what a reader will actually read | Enumerating the failure mode explicitly is the point |
 
-Editing one of these files with a prose editor's instincts quietly degrades it. **Read them** — for terminology, spelling, the named ground-truth source, and constraints to obey — and leave authoring them to the tooling that owns them.
+Editing one of these files with a prose editor's instincts quietly degrades it. **Read them** (for terminology, spelling, the named ground-truth source, and constraints to obey) and leave authoring them to the tooling that owns them.
 
 ## 4. Choosing, in one question
 

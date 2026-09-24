@@ -1,26 +1,26 @@
 ---
 name: ai-seo
-description: Use when asked to make content citable by AI systems — "add or update llms.txt", "add JSON-LD or schema.org markup", "serve Markdown twins", "optimise for AI search or RAG retrieval", "why does the AI summarise our docs wrongly?". Not classic search SEO (seo-audit).
+description: Use when asked to make content citable by AI systems ("add or update llms.txt", "add JSON-LD or schema.org markup", "serve Markdown twins", "optimise for AI search or RAG retrieval", "why does the AI summarise our docs wrongly?"). Not classic search SEO (seo-audit).
 argument-hint: "<site URL, built output dir, or docs tree> [llms.txt | structured-data | twins]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---
 
-# ai-seo — citability by AI search and retrieval
+# ai-seo: citability by AI search and retrieval
 
 Work on **$ARGUMENTS**.
 
-> **`references/…` paths resolve from the plugin root** (beside `skills/`, two levels up — not under this skill): `${CLAUDE_PLUGIN_ROOT}/references/…` on Claude Code, `../../references/…` relative, or Glob for the installed copy.
+> **`references/…` paths resolve from the plugin root** (beside `skills/`, two levels up, not under this skill): `${CLAUDE_PLUGIN_ROOT}/references/…` on Claude Code, `../../references/…` relative, or Glob for the installed copy.
 
 The checklist is `references/seo-checklist.md` §4 (with §3 for content signals). This skill is the procedure.
 
 ## The model to hold
 
-A retrieval system does not read your page — it reads **a chunk of it**, out of context, and then decides whether it can attribute the chunk to you. Everything below follows from that:
+A retrieval system does not read your page; it reads **a chunk of it**, out of context, and then decides whether it can attribute the chunk to you. Everything below follows from that:
 
 - **Chunks must stand alone.** An `h2` section that says "this" or "the above" is useless once extracted. Resolve pronouns and expand acronyms **per section**, not once per page.
 - **The opening sentence is what gets quoted.** Put the definition there. History and motivation come after.
 - **Plain structure survives; chrome does not.** Tables, lists, and fenced code extract intact. Nested theme markup, tabbed panes, and JS-rendered content often do not.
-- **Attribution needs a stable surface** — a canonical URL, a title, an organisation. Anonymous content gets paraphrased without credit.
+- **Attribution needs a stable surface**: a canonical URL, a title, an organisation. Anonymous content gets paraphrased without credit.
 
 Note honestly what is and is not established here: `llms.txt` is an **emerging convention** (<https://llmstxt.org>) with no guarantee any given system consumes it, and retrieval pipelines are largely undocumented. Recommend the cheap, no-downside measures; do not claim a ranking effect you cannot cite (`references/claims-and-evidence.md`).
 
@@ -28,7 +28,7 @@ Note honestly what is and is not established here: `llms.txt` is an **emerging c
 
 A Markdown index at the site root: what the site is, then curated links with a one-line description each.
 
-Audit: does it exist at `/llms.txt`? Is it served as `text/plain` or `text/markdown` and reachable? **Does it still match the nav?** A stale `llms.txt` is worse than none — it confidently points at pages that moved.
+Audit: does it exist at `/llms.txt`? Is it served as `text/plain` or `text/markdown` and reachable? **Does it still match the nav?** A stale `llms.txt` is worse than none: it confidently points at pages that moved.
 
 Shape:
 
@@ -45,7 +45,7 @@ Shape:
 - [Changelog](https://example.org/changelog/): release history
 ```
 
-Rules: absolute URLs; canonical URLs only; one line per link, describing the page rather than repeating its title; group by reader intent; put lower-value material under `## Optional` so a fetcher can skip it. Keep it generated from, or checked against, the nav — and name it in the repo's documentation-sync rule so it moves in lockstep.
+Rules: absolute URLs; canonical URLs only; one line per link, describing the page rather than repeating its title; group by reader intent; put lower-value material under `## Optional` so a fetcher can skip it. Keep it generated from, or checked against, the nav. Name it in the repo's documentation-sync rule so it moves in lockstep.
 
 ## 2 · Markdown twins
 
@@ -70,7 +70,7 @@ JSON-LD in `<head>`. Pick the type from what the page actually is:
 Hard rules:
 
 - **Never mark up content that is not visible on the page.** It is a policy violation, and inventing a FAQ to win a rich result is also a claims violation (`claims-and-evidence.md`).
-- **Validate it.** Invalid JSON-LD is silently ignored — a syntax error produces no visible symptom at all. Parse it: `python3 -c "import json,sys;json.load(sys.stdin)"`.
+- **Validate it.** Invalid JSON-LD is silently ignored: a syntax error produces no visible symptom at all. Parse it: `python3 -c "import json,sys;json.load(sys.stdin)"`.
 - Include `@context`, `@type`, `name`/`headline`, `description`, `url` (canonical), and a `publisher`/`author` so attribution has somewhere to land.
 - One primary entity per page. Do not stack unrelated types.
 
@@ -82,7 +82,7 @@ Apply while auditing or editing (`seo-checklist.md` §3):
 - Definition in the opening sentence of the page and of each major section.
 - The reader's question as the heading where they arrive with one.
 - Tables and lists for parameters, comparisons, and steps.
-- **Primary content in the served HTML** — not gated, not JS-rendered. What is not served is, for most pipelines, not there.
+- **Primary content in the served HTML**: not gated, not JS-rendered. What is not served is, for most pipelines, not there.
 
 ## 5 · Verify and report
 
@@ -94,7 +94,7 @@ curl -s   https://example.org/llms.txt          # still matches the nav?
 curl -s   https://example.org/page/ | grep -A20 'application/ld+json'
 ```
 
-Report as **artefact · symptom · fix**, ranked by effect on citability: **absent or stale index** → **content not extractable** (JS-rendered, gated, chrome-heavy) → **no attribution surface** → **missing or invalid structured data** → **chunk-level fixes**. State what you fetched, what you could not check, and — for each recommendation — whether it is established practice or an emerging convention.
+Report as **artefact · symptom · fix**, ranked by effect on citability: **absent or stale index** → **content not extractable** (JS-rendered, gated, chrome-heavy) → **no attribution surface** → **missing or invalid structured data** → **chunk-level fixes**. State what you fetched, what you could not check, and, for each recommendation, whether it is established practice or an emerging convention.
 
 ## 6 · Hand off
 
