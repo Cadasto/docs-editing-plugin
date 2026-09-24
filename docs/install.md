@@ -1,14 +1,12 @@
 # Installing the Docs Editing Plugin
 
-> Pure Markdown + JSON; there is no build step and **no MCP server** to wire up.
-
-Distributed for both [Claude Code](https://docs.claude.com/en/docs/claude-code/plugins) (`.claude-plugin/`) and [Cursor](https://cursor.com/docs/plugins) (`.cursor-plugin/`). Skill, agent, and reference content is shared; only the manifest and hook layer differ.
+This page is for anyone installing, updating, or loading a working copy of the plugin on [Claude Code](https://docs.claude.com/en/docs/claude-code/plugins) (`.claude-plugin/`) or [Cursor](https://cursor.com/docs/plugins) (`.cursor-plugin/`), and for setting up the optional Vale toolchain. Skill, agent, and reference content is shared; only the manifest and hook layer differ. The plugin is pure Markdown + JSON, with no build step and **no MCP server** to wire up.
 
 ## Claude Code
 
 ### Install (from the Cadasto marketplace)
 
-```
+```text
 /plugin marketplace add Cadasto/plugin-marketplace
 /plugin install docs-editing@cadasto
 ```
@@ -38,7 +36,7 @@ claude plugin validate .                # manifest + component structure
 claude plugin details docs-editing      # component inventory + projected token cost
 ```
 
-```
+```text
 /plugin marketplace update cadasto
 /plugin update docs-editing
 ```
@@ -53,15 +51,15 @@ Add this repository as a plugin (Cursor **Settings → Plugins**, via Git URL or
 
 ## Host toolchain (optional but recommended)
 
-The plugin installs and its skills work with no tooling at all. Two prose linters make the mechanical half of the house style machine-enforced rather than a reviewer's problem:
+The plugin installs and its skills work with no tooling at all. One prose linter, Vale, makes the mechanical half of the house style machine-enforced rather than a reviewer's problem:
 
 | Tool | Owns | Install |
 |---|---|---|
-| **[Vale](https://vale.sh)** | Prose style: voice, hedges, weasel words, condescension, terminology | `brew install vale`, `go install github.com/errata-ai/vale/v3/cmd/vale@latest`, or a release binary |
+| **[Vale](https://vale.sh)** | Prose style: voice, hedges, weasel words, condescension, terminology | A [release binary](https://github.com/vale-cli/vale/releases) or `brew install vale` |
 
 Vale checks **prose**, not Markdown structure. Heading nesting, fence language tags, and trailing whitespace are conventions applied by judgment (`references/style-guide.md` §6); this plugin ships no structural linter. Where a repo already runs one, the skills respect its config.
 
-Run `/docs-lint-setup` in a repository to scaffold `.vale.ini` from the plugin's reference config, seed the Vale vocabulary, and gitignore the downloaded style packages. Then:
+Run `/docs-lint-setup` in a repository to scaffold `.vale.ini` from the plugin's reference config, seed the Vale vocabulary, copy the `ai-tells` style, and gitignore the downloaded style packages. Then:
 
 ```bash
 vale sync                      # download the style packages named in .vale.ini
@@ -69,7 +67,7 @@ vale .
 vale --minAlertLevel=error .    # errors only -- the triage baseline
 ```
 
-Vale exits `0` clean, `1` on findings, `2` on a config error. Install it from the [release binaries](https://github.com/vale-cli/vale/releases); `go install` currently fails to build.
+Vale exits `0` clean, `1` on findings, `2` on a config error. Prefer the [release binaries](https://github.com/vale-cli/vale/releases); `go install` currently fails to build.
 
 Without Vale the skills still apply the standards by judgment, and the save hook stays silent.
 

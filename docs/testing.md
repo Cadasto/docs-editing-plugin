@@ -1,6 +1,6 @@
 # Testing and validation
 
-This is a pure-content repository: JSON manifests + Markdown components, with no build step and no package manager. Testing means validating structure, then installing locally and exercising the components.
+This page is for contributors checking a change before a pull request or a release. The repository is pure content (JSON manifests and Markdown components, with no build step and no package manager), so testing means validating structure, then loading a working copy and exercising each component.
 
 ## Validation
 
@@ -32,17 +32,18 @@ All four are negative-tested: adding a component without wiring it in, citing a 
 
 ## Local triggering tests
 
-Install from your working copy (see [install.md](install.md)), then exercise each component. The most thorough test is to **dogfood the plugin on a real docs repository**.
+Load your working copy with `--plugin-dir` (see [install.md](install.md)), then exercise each component. The most thorough test is to **dogfood the plugin on a real docs repository**.
 
 - **Session-start hook**: open a repo with a `docs/` tree containing Markdown, or an `mkdocs.yml`; one docs-standards line should print. Open a repo with only a `README.md` and confirm it stays **silent**.
 - **`prose-lint-on-save` hook**: in a repo with a `.vale.ini`, edit a `.md` file and confirm alerts print and **the file is not rewritten**. Remove the config and confirm the hook goes silent.
 - **`docs-editing` router**: ask "should this be a tutorial or a how-to?" or "improve these docs"; it should route and cite, not perform the work itself.
 - **`technical-writing`**: ask it to document a real feature. Confirm it reads the code before drafting, picks exactly one document kind, and runs the commands it puts in the doc.
 - **`copy-editing`**: hand it a page with a planted unsourced statistic and a planted "simply". Confirm it flags the statistic as a **blocker** and does not merely soften it, and that it establishes the proofread / line-edit / structural contract before editing.
+- **`humanize`**: hand it a page with planted AI tells (a chatbot pleasantry, a staged contrast, stock vocabulary) and a sentence that carries a fact. Confirm it runs the `ai-tells` Vale style, removes the tells without adding or dropping a fact, and keeps a human author's em dash where the passage carries no other tell. With `--report-only`, confirm it edits nothing and names patterns without judging authorship. Point it at an `AGENTS.md` and confirm it declines.
 - **`marketing-copy`**: ask for a landing page for something with no published metrics. **Confirm it refuses to invent statistics or testimonials** and offers the mechanism instead. This is the plugin's headline behaviour; test it deliberately.
 - **`seo-audit`**: point it at a built site directory and a live URL. Confirm it states which source it audited and what it could not check, and that `--fix` edits the **source**, never the build output.
 - **`ai-seo`**: point it at a site with a stale `llms.txt`. Confirm it notices the drift against the nav, and validates any JSON-LD rather than eyeballing it.
-- **`/docs-lint-setup`**: run in a repo that already has a `.vale.ini` and confirm it does **not** overwrite it without `--force`. Run in a clean repo and confirm the configs, the vocabulary directory, and the `styles/` gitignore entry all appear.
+- **`/docs-lint-setup`**: run in a repo that already has a `.vale.ini` and confirm it does **not** overwrite it without `--force`. Run in a clean repo and confirm the configs, the vocabulary directory, the `ai-tells` style in `styles/ai-tells/`, and the `styles/` gitignore entry all appear, with the vocabulary and `styles/ai-tells/` still tracked.
 - **Agents**: dispatch `prose-reviewer` at a page with planted claim violations and `seo-auditor` at a docs tree. Confirm each returns ranked findings with an explicit coverage statement, edits nothing, and dispatches no sub-agents.
 - **Cursor rule**: in Cursor, open a file under `docs/` and confirm `docs-editing-context.mdc` attaches.
 

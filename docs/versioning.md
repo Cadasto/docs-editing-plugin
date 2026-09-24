@@ -1,6 +1,6 @@
 # Versioning and releases
 
-This plugin uses [Semantic Versioning](https://semver.org), adapted to skill / agent / rule / reference content:
+This page is for maintainers cutting a release: how the plugin applies [Semantic Versioning](https://semver.org) to skill, agent, rule, and reference content, the release steps, and the marketplace update that makes a release live.
 
 | Bump | When |
 |------|------|
@@ -13,13 +13,14 @@ While on the `0.x` line, treat the plugin as pre-stable: a breaking change may s
 ## Release steps
 
 1. Bump `version` in **both** manifests (they must agree): `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`. Keep `description` and `author` identical across both; `scripts/validate.py` enforces this parity.
-2. Run `./scripts/validate.sh` and `claude plugin validate .`.
-3. **Dogfood:** load a working copy (`claude --plugin-dir /path/to/docs-editing-plugin`) and exercise the components on a real docs repository on **both** hosts; see [testing.md](testing.md). Include the claims-refusal test.
-4. Fold the accumulated `## [Unreleased]` notes into a dated `## [X.Y.Z] - YYYY-MM-DD` section in [CHANGELOG.md](../CHANGELOG.md) (Keep a Changelog: groups in order Added, Changed, Deprecated, Removed, Fixed, Security; see [AGENTS.md](../AGENTS.md#changelog-style)).
-5. Sync the docs surface (AGENTS.md, README.md) with what shipped. The router body and `hooks/session-start.sh` are checked mechanically by the validator, so a missed component fails CI rather than shipping quietly.
-6. Commit (`chore(release): vX.Y.Z`) and tag: `git tag -a vX.Y.Z -m "docs-editing-plugin vX.Y.Z"`.
-7. Push commits and the tag: `git push origin main --follow-tags`.
-8. **Update the marketplace entry**: the release is not live until this lands. See below.
+2. Update the version badge in [README.md](../README.md) to the new version.
+3. Run `./scripts/validate.sh` and `claude plugin validate .`.
+4. **Dogfood:** load a working copy (`claude --plugin-dir /path/to/docs-editing-plugin`) and exercise the components on a real docs repository on **both** hosts; see [testing.md](testing.md). Include the claims-refusal test.
+5. Fold the accumulated `## [Unreleased]` notes into a dated `## [X.Y.Z] - YYYY-MM-DD` section in [CHANGELOG.md](../CHANGELOG.md) (Keep a Changelog: groups in order Added, Changed, Deprecated, Removed, Fixed, Security; see [AGENTS.md](../AGENTS.md#changelog-style)).
+6. Sync the docs surface (AGENTS.md, README.md) with what shipped. The router body and `hooks/session-start.sh` are checked mechanically by the validator, so a missed component fails CI rather than shipping quietly.
+7. Commit (`chore(release): vX.Y.Z`) and tag: `git tag -a vX.Y.Z -m "docs-editing-plugin vX.Y.Z"`.
+8. Push commits and the tag: `git push origin main --follow-tags`.
+9. **Update the marketplace entry**: the release is not live until this lands. See below.
 
 ## Coupling to external tooling
 
@@ -33,7 +34,7 @@ This plugin has **no companion MCP server**, so there is no server-compatibility
 
 Public install is via the [Cadasto marketplace](https://github.com/Cadasto/plugin-marketplace) as `docs-editing@cadasto`. The catalog **pins every entry to a release tag**, so tagging and pushing a release here does not ship it; users see nothing until the marketplace entry moves.
 
-After step 7, update the entry in `Cadasto/plugin-marketplace`:
+After step 8, update the entry in `Cadasto/plugin-marketplace`:
 
 1. Bump that entry's `version` to `X.Y.Z` and `source.ref` to `vX.Y.Z` together (validation there rejects a mismatch).
 2. Bump the catalog's own `metadata.version`: a plugin minor/major is a catalog **minor**, a plugin patch is a catalog **patch**.

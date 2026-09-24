@@ -1,8 +1,8 @@
 # Skill, agent, and rule authoring conventions
 
-The detailed companion to [AGENTS.md](../AGENTS.md) (which is authoritative); this expands on the *how*. The shipped components are the reference examples.
+This page is for contributors adding or changing a skill, agent, or Cursor rule in this repository: naming and layout, the trigger `description`, body conventions, and the order of work that keeps the validator passing. [AGENTS.md](../AGENTS.md) is authoritative; this page expands on the *how*, and the shipped components are the reference examples.
 
-## Naming & layout
+## Naming and layout
 
 - **Components are kebab-case** and namespaced `<plugin>:<component>` (for example `docs-editing:copy-editing`). A component's frontmatter `name` MUST equal its directory (skills) or filename stem (agents); `scripts/validate.py` enforces this.
 - `skills/<name>/SKILL.md` (includes user-invoked slash commands) · `agents/<name>.md` · `rules/<name>.mdc`. Shared reference material lives in top-level **`references/`**. The legacy `commands/<name>.md` layout is not used; host validators treat every `commands/**/*.md` as a command and warn on missing frontmatter.

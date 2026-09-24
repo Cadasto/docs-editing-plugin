@@ -8,7 +8,9 @@ The **Docs Editing Plugin** (`docs-editing`) is an AI plugin by Cadasto B.V. tha
 
 It is **general-purpose and stack-agnostic** by design: the components operate on prose (`*.md`, page copy, site metadata, `llms.txt`) and on the target repository's own conventions, so the same skills serve an MkDocs site, a Docusaurus site, and a plain `docs/` tree unchanged.
 
-> **Do not assume a component exists because it is documented here; check the tree first.** The shipped surface is the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `humanize`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; five canonical references plus the reference `vale.ini`, its `vocab-accept.txt` seed and the `ai-tells` Vale style; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. The current version and what changed in it live in `CHANGELOG.md` and the git tags, not here, where they only go stale.
+> **Do not assume a component exists because it is documented here; check the tree first.** The shipped surface is the auto-invoked `docs-editing` **router**; seven worker skills: `technical-writing`, `copy-editing`, `humanize`, `marketing-copy`, `seo-audit`, `ai-seo`, and `docs-lint-setup` (the Vale scaffolder, usually run as `/docs-lint-setup`); the report-only `prose-reviewer` and `seo-auditor` agents; five canonical references plus the reference `vale.ini`, its `vocab-accept.txt` seed and the `ai-tells` Vale style; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. The current version and what changed in it live in `CHANGELOG.md` and the git tags, not here, where they only go stale.
+
+Scope is the **human-facing prose and content layer**. Deliberately **not** in scope: **agent-instruction files** (read for conventions, never authored; see the [audience boundary](#audience-boundary-human-facing-prose-only)); source-code review; specification, requirement, and traceability authoring (the `sdd` plugin's layer); and domain facts, which come from the target repo's named ground-truth source. This keeps the surface small and non-colliding. The human-facing pitch is [README.md](README.md); do not restate it here.
 
 ## Domain Context
 
@@ -54,7 +56,7 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 
 - **Claude manifest**: `.claude-plugin/plugin.json`: `name` (`docs-editing`), `version`, `description`, `author` (an **object** `{name, url}`; `claude plugin validate` rejects a bare string), `license`, `repository`, `keywords`. Claude Code discovers components from the **default folders** (`skills/`, `agents/`, `hooks/`) automatically.
 - **Cursor manifest**: `.cursor-plugin/plugin.json`: same metadata **plus** explicit top-level path keys (`skills`, `agents`, `rules`, `hooks`). No `mcpServers`: this plugin has no MCP backend. Keep `name`/`version`/`description`/`author` identical to the Claude manifest.
-- **Skills**: `skills/<name>/SKILL.md`, shared by both hosts. The seven worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router. **Skills use `allowed-tools:` (the Claude Code skill/command key; Cursor reads it too); only agents use `tools:`.**
+- **Skills**: `skills/<name>/SKILL.md`, shared by both hosts. The seven worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router (`allowed-tools`, no `argument-hint`). **Skills use `allowed-tools:` (the Claude Code skill/command key; Cursor reads it too); only agents use `tools:`.**
 - **Agents**: `agents/<name>.md`: report-only, context-isolated specialists (`tools:` not `allowed-tools:`). Neither declares `Write`/`Edit`; both declare `Bash` to run the linters, so the no-edit property is a contract in the body, not a sandbox.
 - **References**: `references/`: the five canonical rule documents plus the reference linter config (`vale.ini`), the `vocab-accept.txt` vocabulary seed it points at, and the plugin's own Vale style in `vale-styles/ai-tells/`, which `/docs-lint-setup` copies into a repo's `styles/`. Components cite these instead of duplicating rules.
 - **Cursor rules**: `rules/*.mdc`: Cursor-only rule guidance (`description` / `globs` / `alwaysApply`), referenced by the Cursor manifest's `rules` path. Shipped: `rules/docs-editing-context.mdc`.
@@ -62,12 +64,10 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 - **Cursor hooks**: `hooks/cursor-hooks.json`: object `{ "version": 1, "hooks": { "sessionStart": [...], "afterFileEdit": [...] } }`; the command runs from the plugin root (**workspace-relative**, **not** `${CLAUDE_PLUGIN_ROOT}`).
 - **Shared hook scripts**: `hooks/session-start.sh` (detects a docs/content workspace and prints context + the skill surface) and `hooks/prose-lint-on-save.sh` (reports `vale` alerts for the just-edited Markdown file). Both host-agnostic; both exit 0 always.
 - **Claude settings**: `.claude/settings.json` enables the maintainer plugins used while developing this repo (skill-creator, superpowers, plugin-dev, claude-md-management) and pre-approves the validate commands; `.claude/CLAUDE.md` imports this file via `@../AGENTS.md`. `.claude/settings.local.json` is gitignored.
-- **Validation**: `scripts/validate.sh` (graceful local wrapper: warns and skips if Python is absent) runs `scripts/validate.py`, which checks both manifests, dual-host parity, declared component paths, kebab-case names, hook-config JSON *and script executability*, skill/agent/rule frontmatter, plus the four plugin-specific invariants below. Stdlib-only. CI pins Python, runs the validator strictly, and `bash -n`s both hook scripts ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
-- **Contributor docs**: `docs/` holds committed human-facing references: [install](docs/install.md), [testing](docs/testing.md), [versioning](docs/versioning.md), [authoring](docs/authoring.md). `.github/` holds issue + PR templates, `copilot-instructions.md`, and the validate workflow. (Planning/research working notes under `docs/plans/` and `docs/research/` are gitignored, not part of the published plugin.)
+- **Validation**: `scripts/validate.sh` (graceful local wrapper: warns and skips if Python is absent) runs `scripts/validate.py`, stdlib-only; the full list of checks, including the four plugin-specific invariants (reference resolution, links and anchors, tool grants, doc sync), is owned by [docs/testing.md](docs/testing.md#validation). CI pins Python, runs the validator strictly, and `bash -n`s both hook scripts ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
+- **Contributor docs**: `docs/`, where each page **owns** its topic and this file keeps only the one-line rule plus a pointer: [install](docs/install.md) (marketplace, `--plugin-dir`, Cursor, host toolchain), [authoring](docs/authoring.md) (naming, layout, `description`, body, adding a component), [testing](docs/testing.md) (validator checks, triggering tests), [versioning](docs/versioning.md) (SemVer, release steps, marketplace repin). When a convention changes, update the owning page and do not restate it in two places. `.github/` holds issue + PR templates, `copilot-instructions.md`, and the validate workflow. (Planning/research working notes under `docs/plans/` and `docs/research/` are gitignored, not part of the published plugin.)
 
 ## Components
-
-Scope is the **human-facing prose and content layer**. Deliberately **not** in scope: **agent-instruction files** (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `rules/*.mdc`, `.github/copilot-instructions.md`, skill and agent definitions; read for conventions, never authored; see the audience boundary above); source-code review; specification, requirement, and traceability authoring (the `sdd` plugin's layer); and domain facts, which come from the target repo's named ground-truth source. This keeps the surface small and non-colliding.
 
 ### Skills (8)
 
@@ -106,18 +106,16 @@ claude plugin validate .                       # manifest + component structure 
 claude --plugin-dir /path/to/docs-editing-plugin        # load a working copy (session-scoped)
 ```
 
-Then exercise the components on a real docs repository and verify skill auto-triggering and both agents on both hosts. Fuller guidance: [`docs/`](docs/).
+Then exercise the components on a real docs repository and verify skill auto-triggering and both agents on both hosts; the per-component checks are in [docs/testing.md](docs/testing.md#local-triggering-tests).
 
 **The regression test that matters most:** ask any skill to make a technical page "more compelling" with no source material available. Correct behaviour is to **name what it cannot claim** and offer specificity instead. A plausible statistic, a testimonial, or "trusted by teams worldwide" is a **defect in the component**, not a prompt problem. Fix it in `references/claims-and-evidence.md`, not only in the skill that slipped.
 
 ### File Conventions
 
-- Skills go in `skills/<name>/SKILL.md` (this includes user-invoked slash commands, carrying `argument-hint`/`allowed-tools`); agents in `agents/<name>.md`; Cursor rules in `rules/<name>.mdc`. The legacy `commands/<name>.md` layout is **not** used; host validators treat every `commands/**/*.md` as a command and warn on missing frontmatter.
-- Shared reference material lives in top-level **`references/`**, never under `commands/`.
+- Skills go in `skills/<name>/SKILL.md` (this includes user-invoked slash commands, carrying `argument-hint`/`allowed-tools`); agents in `agents/<name>.md`; Cursor rules in `rules/<name>.mdc`. The legacy `commands/<name>.md` layout is **not** used; host validators treat every `commands/**/*.md` as a command and warn on missing frontmatter. Rationale, naming (task-named, unprefixed worker skills), and the `description` and body conventions: [docs/authoring.md](docs/authoring.md).
 - All Markdown components use YAML frontmatter; frontmatter `name` MUST equal the directory (skills) or filename stem (agents).
 - Use **kebab-case** for all directory and file names.
-- `allowed-tools:` (skills) pre-approves tools; **agents use `tools:`**; `allowed-tools:` in an agent file is ignored and the agent silently inherits all tools.
-- Worker skills are named for the **task**, unprefixed (`copy-editing`, not `docs-copy-editing`); they read better as `/copy-editing`, and the plugin namespace already disambiguates.
+- `allowed-tools:` (skills) pre-approves tools; **agents use `tools:`** (see Gotchas).
 - Skill bodies are imperative and **cite `references/`** rather than restating rules. Every component carries the one-line note that `references/` resolves from the **plugin root**.
 - Use `${CLAUDE_PLUGIN_ROOT}` for intra-plugin paths in Claude hook fields; never hardcode absolute paths or `~`.
 - **This repo's own human-facing prose follows its own rules.** README, `docs/`, and CHANGELOG are held to `references/style-guide.md` and `references/claims-and-evidence.md`. Dogfooding is the cheapest test the plugin has. This file and the component bodies are agent-instruction prose: the claims rule still binds them, the style guide does not.
@@ -125,10 +123,6 @@ Then exercise the components on a real docs repository and verify skill auto-tri
 ### Documentation Sync
 
 When adding or renaming a component, update in lockstep: the **router's routing table** (`skills/docs-editing/SKILL.md`), the announced surface in **`hooks/session-start.sh`**, **AGENTS.md** (component tables), **README.md**, and **CHANGELOG.md**. The first two are **enforced by `scripts/validate.py`** and fail CI if skipped; the rest are on you. The full ordered procedure is in [docs/authoring.md](docs/authoring.md#adding-a-component).
-
-### Versioning
-
-Plugin version (and, for consistency, description and author) must be kept in sync in **both** `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`. Follow Semantic Versioning; update both manifests and **CHANGELOG.md** when releasing. See [docs/versioning.md](docs/versioning.md).
 
 ### CHANGELOG style
 
@@ -140,9 +134,13 @@ Plugin version (and, for consistency, description and author) must be kept in sy
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), e.g. `feat(skills): add copy-editing skill`, `fix(agents): correct tools list in prose-reviewer`. Scopes: `skills`, `agents`, `hooks`, `references`, `rules`, `docs`.
 
+### Versioning
+
+Plugin version (and, for consistency, description and author) must be kept in sync in **both** `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`. Follow Semantic Versioning; update both manifests and **CHANGELOG.md** when releasing. Tags are annotated `vX.Y.Z` (`git tag -a`). The bump rules and release steps are owned by [docs/versioning.md](docs/versioning.md); a tag ships nothing until the marketplace entry is repinned (see Gotchas).
+
 ### Branching
 
-Use feature branches and pull requests. Validation runs on every push/PR.
+Use feature branches and pull requests. CI ([`.github/workflows/validate.yml`](.github/workflows/validate.yml)) runs on every pull request and on pushes to `main`.
 
 ## Gotchas
 

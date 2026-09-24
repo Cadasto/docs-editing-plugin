@@ -13,4 +13,4 @@
 - [ ] **No unsourced claim added**: no invented statistics, testimonials, customer names, awards, urgency, or superlatives, in the components or in this repo's own docs (`references/claims-and-evidence.md`)
 - [ ] Inventories and counts in README/AGENTS.md verified against the tree
 - [ ] New or renamed component wired into the router **and** `hooks/session-start.sh` (the validator enforces this)
-- [ ] Version bumped and [CHANGELOG.md](../CHANGELOG.md) updated (if component content changed); see [docs/versioning.md](../docs/versioning.md)
+- [ ] Version bumped, README version badge updated, and [CHANGELOG.md](../CHANGELOG.md) updated (if component content changed); see [docs/versioning.md](../docs/versioning.md)
