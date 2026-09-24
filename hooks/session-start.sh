@@ -24,7 +24,7 @@ is_docs_workspace() {
 }
 
 if is_docs_workspace; then
-  echo "› Docs/content workspace detected — docs-editing standards available. Claims must be traceable to a source (never invent statistics, testimonials or superlatives); pick one document kind per file. Skills: /technical-writing · /copy-editing · /marketing-copy · /seo-audit · /ai-seo · /docs-lint-setup. Agents: prose-reviewer · seo-auditor. Scope is human-facing prose; agent-instruction files (AGENTS.md, CLAUDE.md, rules) are read for conventions, never rewritten. Read the repo's own AGENTS.md/style guide first — it outranks these defaults."
+  echo "› Docs/content workspace detected: docs-editing standards available. Claims must be traceable to a source (never invent statistics, testimonials or superlatives); pick one document kind per file; write no em dashes. Skills: /technical-writing · /copy-editing · /humanize · /marketing-copy · /seo-audit · /ai-seo · /docs-lint-setup. Agents: prose-reviewer · seo-auditor. Scope is human-facing prose; agent-instruction files (AGENTS.md, CLAUDE.md, rules) are read for conventions, never rewritten. Read the repo's own AGENTS.md/style guide first; it outranks these defaults."
 fi
 
 exit 0

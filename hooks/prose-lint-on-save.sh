@@ -43,7 +43,7 @@ command -v vale >/dev/null 2>&1 || exit 0
 out="$(vale --output=line "$f" 2>/dev/null | head -n "$MAX_LINES")" || true
 
 if [ -n "${out//[$'\n't ]/}" ]; then
-  echo "› prose lint — $f"
+  echo "› prose lint: $f"
   printf '%s\n' "$out"
   echo "  (advisory; nothing was rewritten. Style rules: docs-editing references/style-guide.md)"
 fi

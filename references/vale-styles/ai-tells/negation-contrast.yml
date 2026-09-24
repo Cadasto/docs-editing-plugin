@@ -1,0 +1,12 @@
+# "It's not X, it's Y" and "not just X": a contrast with an opponent nobody raised.
+# The catalogue rates it strong (references/ai-tells.md §2), but a regex cannot tell it
+# from a warning the reader needs, so this is a suggestion. Conditionals ("If it's not
+# set, it is created") are excluded by the lookbehind.
+extends: existence
+message: "Staged contrast '%s': state the positive claim directly."
+level: suggestion
+ignorecase: true
+tokens:
+  - '(?<!\b(?:if|when|unless|whether|once|while|where) )(?:it|this|that)(?:[''’]s| is) not (?:just |only |merely )?(?:about )?[^.,;]{1,40}, (?:it|this|that)(?:[''’]s| is)'
+  - '(?:isn[''’]t|is not|aren[''’]t|are not) (?:just|merely) (?:a|an|about)'
+  - 'more than just'

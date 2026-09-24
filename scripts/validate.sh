@@ -21,7 +21,7 @@ elif command -v python >/dev/null 2>&1 && python -c 'import sys; sys.exit(0 if s
 fi
 
 if [ -z "$py" ]; then
-  echo "WARNING: Python 3 not found — skipping deep manifest/frontmatter validation." >&2
+  echo "WARNING: Python 3 not found; skipping deep manifest/frontmatter validation." >&2
   echo "         This is optional locally. For full checks install python3 and re-run," >&2
   echo "         or run 'claude plugin validate .' (no Python required)." >&2
   exit 0

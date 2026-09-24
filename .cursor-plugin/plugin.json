@@ -1,7 +1,7 @@
 {
   "name": "docs-editing",
-  "version": "0.3.0",
-  "description": "Human-facing documentation and content standards for AI assistants — technical writing, copy editing, marketing copy, SEO and AI citability, with claims grounded in cited evidence.",
+  "version": "0.4.0",
+  "description": "Human-facing documentation and content standards for AI assistants: technical writing, copy editing, AI-tell cleanup, marketing copy, SEO and AI citability, with claims grounded in cited evidence.",
   "author": {
     "name": "Cadasto B.V.",
     "url": "https://github.com/Cadasto"

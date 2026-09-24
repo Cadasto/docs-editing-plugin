@@ -1,0 +1,12 @@
+# Authority with no source. The rule it enforces lives in references/claims-and-evidence.md;
+# this catches the phrasing (references/ai-tells.md §3). "report" only counts when it
+# introduces an outcome, so "teams report incidents" is not flagged.
+extends: existence
+message: "Unsourced attribution '%s': cite the source next to it, or cut the claim."
+level: warning
+ignorecase: true
+tokens:
+  - '(?:experts|researchers|studies|research|analysts|observers|critics) (?:say|says|agree|believe|suggest|suggests|show|shows|have shown|indicate|indicates)'
+  - '(?:it is|it[''’]s) (?:widely|generally|often|commonly) (?:believed|accepted|acknowledged|regarded|recognised|recognized)'
+  - '(?:many|most) (?:experts|users|teams|developers|people) (?:say|believe|agree)'
+  - '(?:teams|users|customers|developers) report (?:that|seeing|faster|fewer|higher|lower|better|up to|\d)'

@@ -1,0 +1,25 @@
+# Words and phrases that language models over-produce and careful technical writers rarely
+# choose (references/ai-tells.md §3). Swapping one for a synonym keeps the tell: restate
+# the sentence around its fact. Tokens are phrases rather than bare words where a bare
+# word is also a product or domain term (Apache Tapestry, Pivotal Tracker); "realm" is left to judgement because identity docs use it literally.
+extends: existence
+message: "Stock phrasing '%s': say what the thing does, plainly."
+level: warning
+ignorecase: true
+tokens:
+  - 'delv(?:e|es|ed|ing)'
+  - '(?:rich|vibrant|intricate) tapestry'
+  - 'tapestry of'
+  - '(?:a|stands as a) testament to'
+  - 'pivotal (?:role|moment|step|shift|part)'
+  - 'ever-evolving'
+  - '(?:digital|evolving|dynamic|modern) landscape'
+  - 'in today[''’]s (?:fast-paced|digital|modern) world'
+  - 'game-?changer'
+  - 'unlock(?:s|ing)? the (?:full )?(?:power|potential)'
+  - 'harness(?:es|ing)? the power'
+  - 'navigat(?:e|es|ing) the complexit(?:y|ies)'
+  - 'embark(?:s|ed|ing)? on'
+  - 'underscor(?:e|es|ed|ing) the (?:importance|need|significance)'
+  - 'plays? a (?:crucial|pivotal|vital|key) role'
+  - 'serves as a (?:reminder|cornerstone|testament)'
