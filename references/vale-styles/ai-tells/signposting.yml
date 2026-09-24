@@ -1,0 +1,17 @@
+# Sentences that announce content instead of delivering it (references/ai-tells.md §2).
+# Phrases with a literal use ("at the end of the day" as a time, "in summary
+# statistics") only match at the start of a sentence, followed by a comma.
+extends: existence
+message: "Signposting '%s': state the point instead of announcing it."
+level: warning
+ignorecase: true
+tokens:
+  - 'let[''’]s (?:dive|delve) (?:in|into)'
+  - '(?:dive deep|deep[- ]dive) into'
+  - 'here[''’]s the thing'
+  - '(?:it[''’]s|it is) (?:worth noting|important to note|worth mentioning)'
+  - '(?<=(?:^|[.!?]\s))(?:in conclusion|in summary|at the end of the day)(?=,)'
+  - 'without further ado'
+  - 'let that sink in'
+  - 'the bottom line is'
+  - 'buckle up'

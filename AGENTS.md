@@ -8,7 +8,7 @@ The **Docs Editing Plugin** (`docs-editing`) is an AI plugin by Cadasto B.V. tha
 
 It is **general-purpose and stack-agnostic** by design: the components operate on prose (`*.md`, page copy, site metadata, `llms.txt`) and on the target repository's own conventions, so the same skills serve an MkDocs site, a Docusaurus site, and a plain `docs/` tree unchanged.
 
-> **Do not assume a component exists because it is documented here — check the tree first.** The shipped surface is the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; four canonical references plus the reference `vale.ini` and its `vocab-accept.txt` seed; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. The current version and what changed in it live in `CHANGELOG.md` and the git tags — not here, where they only go stale.
+> **Do not assume a component exists because it is documented here — check the tree first.** The shipped surface is the auto-invoked `docs-editing` **router**; the worker skills `technical-writing`, `copy-editing`, `humanize`, `marketing-copy`, `seo-audit`, `ai-seo`; the user-invoked `/docs-lint-setup`; the report-only `prose-reviewer` and `seo-auditor` agents; five canonical references plus the reference `vale.ini`, its `vocab-accept.txt` seed and the `ai-tells` Vale style; the `rules/docs-editing-context.mdc` Cursor rule; and host-agnostic `session-start` + `prose-lint-on-save` hooks. The current version and what changed in it live in `CHANGELOG.md` and the git tags — not here, where they only go stale.
 
 ## Domain Context
 
@@ -25,12 +25,13 @@ The repair is always the same: **replace the invented outcome with the observabl
 
 The canonical statement — the four claim classes, the never-invent list, the status vocabulary, the inventory-rot rule, and audience calibration — is **[`references/claims-and-evidence.md`](references/claims-and-evidence.md)**. Components cite it rather than restating it.
 
-### The other three references
+### The other four references
 
 Guidance must be grounded in these, not in personal preference. Each is the single home for its rules:
 
 - **[`references/style-guide.md`](references/style-guide.md)** — house style: voice and grammatical person per context, sentence economy, terminology discipline, inclusive language, structure, Markdown mechanics. Names the enforcing tool for every mechanical rule.
 - **[`references/doc-types.md`](references/doc-types.md)** — the four document kinds and their boundary rules, based on **Diátaxis** (<https://diataxis.fr>), plus the fixed contracts for `README.md`, `CHANGELOG.md` ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/)), and migration notes — and §3, the agent-instruction files that are deliberately out of scope.
+- **[`references/ai-tells.md`](references/ai-tells.md)**: the patterns that make prose read as machine-drafted, ranked by strength, with the house em-dash rule (write none; keep a human author's) and the rule that tells describe writing, never authorship. Enforced in part by the `ai-tells` Vale style.
 - **[`references/seo-checklist.md`](references/seo-checklist.md)** — on-page essentials, crawlability, content signals, and the AI-citability layer (`llms.txt` per <https://llmstxt.org>, Markdown twins, JSON-LD per schema.org).
 
 **Deterministic beats prose.** Where a tool enforces a rule, run the tool: **Vale** (<https://vale.sh>) owns prose style. The reference config is `references/vale.ini`; `/docs-lint-setup` scaffolds it. A component must never claim a clean lint it did not run.
@@ -53,9 +54,9 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 
 - **Claude manifest**: `.claude-plugin/plugin.json` — `name` (`docs-editing`), `version`, `description`, `author` (an **object** `{name, url}` — `claude plugin validate` rejects a bare string), `license`, `repository`, `keywords`. Claude Code discovers components from the **default folders** (`skills/`, `agents/`, `hooks/`) automatically.
 - **Cursor manifest**: `.cursor-plugin/plugin.json` — same metadata **plus** explicit top-level path keys (`skills`, `agents`, `rules`, `hooks`). No `mcpServers` — this plugin has no MCP backend. Keep `name`/`version`/`description`/`author` identical to the Claude manifest.
-- **Skills**: `skills/<name>/SKILL.md` — shared by both hosts. The six worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router. **Skills use `allowed-tools:` (the Claude Code skill/command key — Cursor reads it too); only agents use `tools:`.**
+- **Skills**: `skills/<name>/SKILL.md` — shared by both hosts. The seven worker skills carry `argument-hint` + `allowed-tools` so they are both auto-invoked on intent and user-invocable as `/<name>`; `docs-editing` is the always-on router. **Skills use `allowed-tools:` (the Claude Code skill/command key — Cursor reads it too); only agents use `tools:`.**
 - **Agents**: `agents/<name>.md` — report-only, context-isolated specialists (`tools:` not `allowed-tools:`). Neither declares `Write`/`Edit`; both declare `Bash` to run the linters, so the no-edit property is a contract in the body, not a sandbox.
-- **References**: `references/` — the four canonical rule documents plus the reference linter config (`vale.ini`) and the `vocab-accept.txt` vocabulary seed it points at. Components cite these instead of duplicating rules.
+- **References**: `references/` — the five canonical rule documents plus the reference linter config (`vale.ini`), the `vocab-accept.txt` vocabulary seed it points at, and the plugin's own Vale style in `vale-styles/ai-tells/`, which `/docs-lint-setup` copies into a repo's `styles/`. Components cite these instead of duplicating rules.
 - **Cursor rules**: `rules/*.mdc` — Cursor-only rule guidance (`description` / `globs` / `alwaysApply`), referenced by the Cursor manifest's `rules` path. Shipped: `rules/docs-editing-context.mdc`.
 - **Claude hooks**: `hooks/hooks.json` — object `{ "hooks": { "SessionStart": [...], "PostToolUse": [...] } }`; use `${CLAUDE_PLUGIN_ROOT}` in command paths.
 - **Cursor hooks**: `hooks/cursor-hooks.json` — object `{ "version": 1, "hooks": { "sessionStart": [...], "afterFileEdit": [...] } }`; the command runs from the plugin root (**workspace-relative**, **not** `${CLAUDE_PLUGIN_ROOT}`).
@@ -68,17 +69,18 @@ This repo supports **both Claude Code and Cursor**; shared assets (skills, agent
 
 Scope is the **human-facing prose and content layer**. Deliberately **not** in scope: **agent-instruction files** (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `rules/*.mdc`, `.github/copilot-instructions.md`, skill and agent definitions — read for conventions, never authored; see the audience boundary above); source-code review; specification, requirement, and traceability authoring (the `sdd` plugin's layer); and domain facts, which come from the target repo's named ground-truth source. This keeps the surface small and non-colliding.
 
-### Skills (7)
+### Skills (8)
 
 | Skill | Purpose |
 |-------|---------|
 | `docs-editing` | Auto-invoked router — routes each prose task to the owning skill and the canonical reference; carries the "read the repo's own rules first" instruction and the refusals worth making |
 | `technical-writing` | Author new documentation — orient in the repo, pick exactly **one** document kind, draft to the house style, ground every claim, verify (links, commands, lint) before claiming done |
 | `copy-editing` | Tighten existing prose — establish the proofread / line-edit / structural **contract** first, run the tools, then six passes large-to-small with claims first; reports what it left alone and why |
+| `humanize` | Remove AI tells from existing prose: runs the `ai-tells` Vale style, marks patterns by strength from `references/ai-tells.md`, restates without adding or dropping facts, keeps a human author's em dashes; `--report-only` names patterns, never authorship |
 | `marketing-copy` | Landing, feature, and announcement copy — substance before words, mechanism instead of invented outcome, explicit self-check before handing over |
 | `seo-audit` | Technical and on-page audit of the **published** output; ranked by reader impact, with an honest coverage statement; `--fix` edits source, never build output |
 | `ai-seo` | Citability by AI search — `llms.txt` currency, Markdown twins, **validated** JSON-LD, chunk-level self-containment |
-| `docs-lint-setup` | Scaffold `.vale.ini`, seed the Vale vocabulary, gitignore `styles/`; never overwrites an existing config unprompted |
+| `docs-lint-setup` | Scaffold `.vale.ini`, seed the Vale vocabulary, copy the `ai-tells` style, gitignore `styles/`; never overwrites an existing config unprompted |
 
 ### Agents (2, report-only)
 

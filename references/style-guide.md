@@ -27,6 +27,7 @@ Never use first-person plural ("we recommend") in reference docs — it hides wh
 - **Prefer the short word** where meaning is unchanged: use/utilise, help/facilitate, before/prior to, about/approximately, start/commence, after/subsequent to, so/therefore.
 - **Kill nominalisations.** "perform a validation of" → "validate". "make a decision" → "decide".
 - **No filler intensifiers.** "very", "really", "extremely", "incredibly", "seamlessly", "effortlessly", "robust", "powerful", "cutting-edge". If a thing is fast, say how fast and cite it (see [claims-and-evidence.md](claims-and-evidence.md)).
+- **No AI tells.** Signposting, staged contrasts, inflated significance, stock vocabulary and decorative formatting are catalogued in [ai-tells.md](ai-tells.md). Vale flags the vocabulary; the shapes need reading.
 - **Target ≤ 25 words per sentence**, not as a hard limit but as a smell test — longer usually means a buried second sentence.
 
 ## 3. Word-level conventions
@@ -35,7 +36,7 @@ Never use first-person plural ("we recommend") in reference docs — it hides wh
 - **Expand an acronym once**, at first use, then use the acronym: "Command Line Interface (CLI)".
 - **Spelling** follows the repo. These repos use **British spelling in prose** (`behaviour`, `initialise`, `licence` as noun) while **code identifiers, CLI flags, and cited API names keep their own spelling** (`color`, `initialize`, `--license`). Never "correct" an identifier.
 - **Oxford comma**: use it.
-- **Em dashes** — spaced or unspaced consistently per repo; these repos use spaced em dashes for parenthetical breaks.
+- **No em dashes in prose you write.** Use a comma, a colon, parentheses or a new sentence. A human author's deliberate em dash stays; the full rule, including edits to existing text, is [ai-tells.md](ai-tells.md) §6. Vale: `ai-tells.em-dash`, a suggestion that never fails CI.
 - **Sentence case for headings.** Not Title Case. Proper nouns keep their capitals.
 - **No emoji in reference documentation.** Acceptable sparingly in changelogs or marketing if the repo already does it.
 
@@ -72,5 +73,6 @@ Never use first-person plural ("we recommend") in reference docs — it hides wh
 ## 7. What this guide does not cover
 
 - **Whether a claim may be made at all** → [claims-and-evidence.md](claims-and-evidence.md).
+- **The patterns that make prose read as machine-drafted** → [ai-tells.md](ai-tells.md).
 - **Which document kind you are writing, and what belongs in it** → [doc-types.md](doc-types.md).
 - **Discoverability and machine-readability** → [seo-checklist.md](seo-checklist.md).

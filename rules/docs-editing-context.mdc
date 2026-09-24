@@ -25,7 +25,7 @@ Decide before the first sentence: **tutorial** (one path, no branches, works ver
 
 ## Style essentials
 
-Answer first — the conclusion, command, or definition opens each section; background never precedes it. Active voice, present tense, one idea per sentence. Cut "simply", "just", "obviously", "very", "seamlessly", "powerful", "robust". Sentence-case headings, one `h1`, language-tagged fences with no `$` prompt. Link the noun, never "click here". Cross-reference rather than duplicate — one home per fact. Sections must stand alone: a reader arriving at an `h2` acts without reading upward (this also determines whether AI retrieval can use the chunk).
+Answer first: the conclusion, command, or definition opens each section; background never precedes it. Active voice, present tense, one idea per sentence. Cut "simply", "just", "obviously", "very", "seamlessly", "powerful", "robust". Write no em dashes (use a comma, colon, parentheses or a new sentence), but keep a dash a human author placed on purpose. No signposting ("let's dive in"), staged contrasts ("it's not X, it's Y"), inflated significance, or bold-label bullets; the catalogue is the plugin's `references/ai-tells.md`. Sentence-case headings, one `h1`, language-tagged fences with no `$` prompt. Link the noun, never "click here". Cross-reference rather than duplicate: one home per fact. Sections must stand alone: a reader arriving at an `h2` acts without reading upward (this also determines whether AI retrieval can use the chunk).
 
 ## Run the tools
 
@@ -33,4 +33,4 @@ Whatever `vale` enforces, run it rather than reasoning it out. The repo's own `.
 
 ## Skills
 
-`/technical-writing` (author docs) · `/copy-editing` (tighten existing prose) · `/marketing-copy` (landing and positioning) · `/seo-audit` (titles, metadata, links, crawlability) · `/ai-seo` (`llms.txt`, structured data, citability) · `/docs-lint-setup`. Agents: `prose-reviewer`, `seo-auditor`. For the full rules use the `docs-editing` router skill and the plugin's `references/`.
+`/technical-writing` (author docs) · `/copy-editing` (tighten existing prose) · `/humanize` (remove AI tells) · `/marketing-copy` (landing and positioning) · `/seo-audit` (titles, metadata, links, crawlability) · `/ai-seo` (`llms.txt`, structured data, citability) · `/docs-lint-setup`. Agents: `prose-reviewer`, `seo-auditor`. For the full rules use the `docs-editing` router skill and the plugin's `references/`.

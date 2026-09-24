@@ -46,6 +46,7 @@ Apply `references/style-guide.md` (voice, person, sentence economy, headings, Ma
 - **Show the command, not a description of the command.** Language-tagged fences, no `$` prompt, copy-pasteable.
 - **Name the prerequisites and the limits early.** What it does not do buys more trust than any adjective.
 - **Cross-reference; never duplicate.** One home per fact.
+- **Write without the AI tells** in `references/ai-tells.md`: no em dashes, no signposting, no staged contrasts, no quotable closers, no bold-label bullets.
 - **State maturity plainly** — `shipped` / `experimental` / `planned` / `deprecated`. Never describe planned behaviour in the present indicative.
 
 ## 4 · Ground every claim

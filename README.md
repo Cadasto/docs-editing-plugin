@@ -39,15 +39,16 @@ Or load a local working copy for one session: `claude --plugin-dir /path/to/docs
 | Skill `docs-editing` | shipped | Auto-invoked router: sends each prose task to the skill that owns it, and to the canonical rule in `references/`. |
 | Skill `/technical-writing` | shipped | Author new documentation — picks exactly one document kind, reads the code before drafting, runs the commands it writes. |
 | Skill `/copy-editing` | shipped | Tighten existing prose. Establishes the proofread / line-edit / structural contract first, then works large-to-small; claims pass runs first. |
+| Skill `/humanize` | shipped | Remove AI tells from existing prose: signposting, staged contrasts, inflated significance, chatbot residue, decorative formatting. Restates without adding facts, keeps a human author's em dashes, and never judges authorship. |
 | Skill `/marketing-copy` | shipped | Landing, feature, and announcement copy for technical audiences, with the anti-fabrication guardrails applied before drafting. |
 | Skill `/seo-audit` | shipped | Technical and on-page audit of the **published** output — titles, descriptions, headings, canonicals, sitemap, redirects, orphans. |
 | Skill `/ai-seo` | shipped | Citability by AI search — `llms.txt`, Markdown twins, validated JSON-LD, chunk-level self-containment. |
-| Skill `/docs-lint-setup` | shipped | Scaffold `.vale.ini` and seed the vocabulary; never overwrites an existing config unprompted. |
+| Skill `/docs-lint-setup` | shipped | Scaffold `.vale.ini`, seed the vocabulary and add the `ai-tells` style; never overwrites an existing config unprompted. |
 | Agent `prose-reviewer` | shipped | Report-only prose review for what linters cannot see: unsourced claims, doc-kind bleed, stale inventories, terminology drift. Ranked findings. |
 | Agent `seo-auditor` | shipped | Report-only discoverability sweep over a docs tree or live site, with a mandatory coverage statement. |
 | Session-start hook | shipped | Detects a docs/content workspace and prints one standards line plus the surface; dual-host. Silent in a repo with only a `README.md`. |
 | Prose-lint hook | shipped | After each `.md` edit, reports `vale` alerts. Advisory — **never rewrites** — and opt-in: silent unless the repo carries its own `.vale.ini`. |
-| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [SEO checklist](references/seo-checklist.md), plus the reference `vale.ini` and its `vocab-accept.txt` seed. |
+| References | shipped | The canonical rules, cited by every component: [claims and evidence](references/claims-and-evidence.md), [house style](references/style-guide.md), [document kinds](references/doc-types.md), [AI tells](references/ai-tells.md), [SEO checklist](references/seo-checklist.md), plus the reference `vale.ini`, its `vocab-accept.txt` seed and the `ai-tells` Vale style. |
 | Cursor rule `docs-editing-context.mdc` | shipped | Markdown- and docs-scoped guidance mirroring the router for Cursor. |
 
 ## What it covers

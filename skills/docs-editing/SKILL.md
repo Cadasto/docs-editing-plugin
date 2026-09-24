@@ -1,6 +1,6 @@
 ---
 name: docs-editing
-description: Router for prose work — "improve these docs", "what should this document be?", or any request spanning technical-writing (new docs), copy-editing (tighten existing), marketing-copy (landing and launch copy), seo-audit (search visibility), ai-seo (llms.txt, AI citability).
+description: Router for prose work — "improve these docs", "what should this document be?", or any request spanning technical-writing (new docs), copy-editing (tighten existing), humanize (AI tells), marketing-copy (landing and launch copy), seo-audit (search visibility), ai-seo (llms.txt, AI citability).
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -22,12 +22,14 @@ Three principles drive every route:
 |---|---|---|
 | Write new docs — README, guide, reference, tutorial | `vale` on the result | `technical-writing` |
 | Tighten, review, or restructure existing prose | `vale .` on the file | `copy-editing` |
+| Remove AI tells, "humanize", "this reads like ChatGPT" | `vale` with the `ai-tells` style | `humanize` |
 | Landing page, feature page, positioning, announcement | `vale .` | `marketing-copy` |
 | Titles, metadata, headings, links, sitemap, crawlability | fetch the **published** page | `seo-audit` |
 | `llms.txt`, structured data, Markdown twins, citability | fetch the published page | `ai-seo` |
 | Set up prose linting in a repo | — | `/docs-lint-setup` |
 | Which document kind is this? | — | this skill → `references/doc-types.md` |
 | May I write this claim? | — | this skill → `references/claims-and-evidence.md` |
+| Is this AI slop? Which patterns give it away? | `vale` with the `ai-tells` style | `humanize --report-only` → `references/ai-tells.md` |
 | Sentence-level style, voice, person, headings | `vale .` | `references/style-guide.md` |
 
 ## Read the repo's own rules first
@@ -45,6 +47,7 @@ Route these to a conversation rather than to prose:
 
 - **A requested claim with no source.** Offer the mechanism instead (`claims-and-evidence.md` §3), and say plainly that the number, testimonial, or superlative would have to be invented.
 - **A rewrite that would merge two document kinds.** Propose the split.
+- **"Tell me whether AI wrote this" or "make it pass an AI detector".** Report the patterns and their repairs instead; tells describe writing, not writers (`references/ai-tells.md` §8).
 - **A "make it more compelling" request on technical copy.** The usual growth-copy moves lower trust with this audience — `claims-and-evidence.md` §6. Offer specificity instead.
 - **Duplicating prose that already has a canonical home.** Link it; a second copy will drift.
 

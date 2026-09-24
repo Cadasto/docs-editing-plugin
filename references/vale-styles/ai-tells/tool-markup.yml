@@ -1,0 +1,11 @@
+# Citation and placeholder markup that chat tools emit and that should never reach a
+# page (references/ai-tells.md §1). Error level: none of these has a legitimate use.
+extends: existence
+message: "Leftover tool markup '%s': delete it and check the claim it was attached to still has a source."
+level: error
+nonword: true
+tokens:
+  - '\boaicite\b'
+  - '\bcontentReference\b'
+  - '\bturn\d+(?:search|view|news)\d+\b'
+  - '\[(?:[Ii]nsert|[Aa]dd) [^\]]{1,40} [Hh]ere\]'

@@ -7,6 +7,26 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Keep a Changelog: https://keepachangelog.com/en/1.1.0/
 - Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
+## [Unreleased]
+
+### Added
+- Skills: `humanize` removes AI tells from existing prose, with a `--report-only` mode that names patterns and never judges authorship.
+- References: `references/ai-tells.md`, the canonical catalogue of AI tells ranked by strength, with the house em-dash rule and the when-not-to-act list.
+- References: the `ai-tells` Vale style in `references/vale-styles/ai-tells/`: `chatbot-residue`, `tool-markup` (error), `signposting`, `stock-vocabulary`, `vague-attribution` (warning), `negation-contrast`, `em-dash` (suggestion). Tested against Vale 3.18.0 with positive and false-positive fixtures.
+- References: `vocab-accept.txt` accepts `chatbot`.
+
+### Changed
+- References: `style-guide.md` §3 forbids em dashes in assistant-written prose and keeps a human author's; §2 points to `ai-tells.md`.
+- References: `vale.ini` adds `ai-tells` to `BasedOnStyles`.
+- Skills: `/docs-lint-setup` copies the `ai-tells` style into `styles/ai-tells/` and keeps it tracked in `.gitignore`.
+- Skills: `docs-editing` routes AI-tell requests to `humanize` and refuses authorship verdicts and detector evasion.
+- Skills: `copy-editing` names `humanize` in its anti-trigger.
+- References: the good examples in `claims-and-evidence.md` §3 and `marketing-copy` use a colon instead of an em dash.
+- Skills: `copy-editing`, `technical-writing` and `marketing-copy` apply the strong tells and the em-dash rule.
+- Agents: `prose-reviewer` reports AI tells in its style pass.
+- Hooks: `session-start.sh` announces `/humanize` and the em-dash rule.
+- Rules: `docs-editing-context.mdc` names `/humanize` and the em-dash rule.
+
 ## [0.3.0] - 2026-08-25
 
 Makes the shipped Vale setup usable out of the box — a seeded vocabulary, two false-positive rules turned off, and a vocabulary name that is not an organisation's — and corrects three claims this repo's own docs made about tooling it had not run.

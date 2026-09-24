@@ -40,7 +40,7 @@ Softening an unsupported claim keeps the claim and adds evasion. These are all s
 The repair is not a weaker verb. It is to **replace the invented outcome with the observable mechanism**:
 
 > ❌ "Cut review time by 40%."
-> ✅ "Flags silently-swallowed errors, goroutine leaks, and context misuse — the classes `go vet` and `golangci-lint` do not cover."
+> ✅ "Flags silently-swallowed errors, goroutine leaks, and context misuse: the classes `go vet` and `golangci-lint` do not cover."
 
 The mechanism is checkable, specific, and more persuasive to a technical reader than a number they will assume was fabricated.
 

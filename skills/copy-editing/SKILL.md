@@ -1,6 +1,6 @@
 ---
 name: copy-editing
-description: Use when asked to improve prose that already exists — "edit this", "tighten this", "review this page", "proofread", "cut this down", "fix the tone", "why does this read badly?". Line-edits to house style and flags unsupported claims. Editing, not drafting (technical-writing).
+description: Use when asked to improve prose that already exists — "edit this", "tighten this", "review this page", "proofread", "cut this down", "fix the tone", "why does this read badly?". Line-edits to house style and flags unsupported claims. Editing, not drafting (technical-writing); AI tells throughout is humanize.
 argument-hint: "<file, page, or pasted prose> [--report-only]"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
@@ -47,7 +47,7 @@ Order matters: cutting a paragraph makes its sentences moot, so work large to sm
 
 **Pass 3 — paragraph.** One idea per paragraph. Delete the throat-clearing opener. Is the topic sentence actually first? Are two adjacent paragraphs making the same point?
 
-**Pass 4 — sentence.** `references/style-guide.md` §2: one idea per sentence, active voice, present tense, cut nominalisations and filler intensifiers, prefer the short word. Target ≤ 25 words as a smell test, not a rule.
+**Pass 4 — sentence.** `references/style-guide.md` §2: one idea per sentence, active voice, present tense, cut nominalisations and filler intensifiers, prefer the short word. Target ≤ 25 words as a smell test, not a rule. Fix the **strong** AI tells on sight (`references/ai-tells.md` §§1–3); write no new em dashes and keep the author's (§6). A text dense with tells wants the full `humanize` pass.
 
 **Pass 5 — word.** Terminology fixed and consistent (no synonym rotation for variety), acronyms expanded once, spelling per repo, **never** "simply"/"just"/"obviously", no ableist metaphors, `they/them` for unstated gender. `references/style-guide.md` §§3–4.
 
@@ -75,4 +75,4 @@ Re-run `vale` after editing and report the result. Do not claim the prose is cle
 
 ## 5 · Hand off
 
-New documentation to draft → `technical-writing` · landing/positioning copy → `marketing-copy` · titles, metadata, links → `seo-audit` · `llms.txt`, structured data → `ai-seo` · an independent second pass → the `prose-reviewer` agent.
+New documentation to draft → `technical-writing` · AI tells throughout → `humanize` · landing/positioning copy → `marketing-copy` · titles, metadata, links → `seo-audit` · `llms.txt`, structured data → `ai-seo` · an independent second pass → the `prose-reviewer` agent.

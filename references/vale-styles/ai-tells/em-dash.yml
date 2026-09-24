@@ -1,0 +1,11 @@
+# Em dashes, and the spaced en dash used in their place. A suggestion, never an error:
+# the house style keeps dashes out of assistant-written prose but leaves a human
+# author's deliberate dash alone (references/style-guide.md §3, references/ai-tells.md).
+# Silence one passage with <!-- vale ai-tells.em-dash = NO --> … <!-- vale ai-tells.em-dash = YES -->.
+extends: existence
+message: "Dash: prefer a comma, colon, parentheses or a new sentence. Keep it only if a person put it there on purpose."
+level: suggestion
+nonword: true
+tokens:
+  - '(?:\w\s?—|—\s?\w)'
+  - '\w\s–\s\w'

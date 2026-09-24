@@ -18,7 +18,7 @@ Read `references/claims-and-evidence.md` **before drafting**, not after. Convers
 The audience makes this practical rather than merely ethical. Developers, engineers, and clinicians read an unsourced number as evidence of unseriousness, so **the growth-copy move that raises conversion on a consumer page lowers it here** (`claims-and-evidence.md` §6). The persuasive substitute is always the same: **replace the claimed outcome with the observable mechanism.**
 
 > ❌ "Cut documentation review time by 40%."
-> ✅ "Flags unsourced statistics, doc-kind bleed, and terminology drift — the classes a spell-checker cannot see."
+> ✅ "Flags unsourced statistics, doc-kind bleed, and terminology drift: the classes a spell-checker cannot see."
 
 Specific, checkable, and more convincing to this reader than any number they will assume was fabricated.
 
@@ -70,6 +70,7 @@ Run this list explicitly and report the result:
 - [ ] Every inventory and count verified against the tree.
 - [ ] Prerequisites and limits stated on the page, not buried in docs.
 - [ ] The primary action is honestly labelled.
+- [ ] No AI tells from `references/ai-tells.md`: no em dashes, staged contrasts, quotable closers or inflated significance. Launch copy attracts them most.
 - [ ] `vale` run on the result.
 
 State plainly what a page would need in order to make a stronger claim ("a published benchmark", "permission to quote a named user") rather than making the claim without it.

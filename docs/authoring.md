@@ -17,7 +17,7 @@ The detailed companion to [AGENTS.md](../AGENTS.md) (which is authoritative); th
 
 ## The `description` (the trigger)
 
-For skills the `description` is always-on metadata: keep it lean and third person — *what + scope*, then 3–5 representative triggers as **quoted phrases a user would actually type** ("write a README", "tighten this copy", "add llms.txt"), then a short **"Not for …"** anti-trigger disambiguating it from its neighbours. The five worker skills sit close together, so the anti-trigger is what stops the wrong one loading: `technical-writing` vs `copy-editing` is *new* vs *existing*; `seo-audit` vs `ai-seo` is *crawlers* vs *retrieval*; `marketing-copy` vs `technical-writing` is *persuasion* vs *documentation*.
+For skills the `description` is always-on metadata: keep it lean and third person — *what + scope*, then 3–5 representative triggers as **quoted phrases a user would actually type** ("write a README", "tighten this copy", "add llms.txt"), then a short **"Not for …"** anti-trigger disambiguating it from its neighbours. The worker skills sit close together, so the anti-trigger is what stops the wrong one loading: `technical-writing` vs `copy-editing` is *new* vs *existing*; `copy-editing` vs `humanize` is *any defect* vs *AI tells*; `seo-audit` vs `ai-seo` is *crawlers* vs *retrieval*; `marketing-copy` vs `technical-writing` is *persuasion* vs *documentation*.
 
 **YAML gotcha:** a `description` value with an unquoted `: ` (colon-space) makes a real YAML parser read it as a nested mapping, so the component loads with *empty* metadata — every field silently dropped. `claude plugin validate` catches this, and `scripts/validate.py` guards against it too. Quote the value, or use a `>` block scalar (as the agents do).
 

@@ -63,7 +63,7 @@ If the file under review is an **agent-instruction file** (`AGENTS.md`, `CLAUDE.
 
 **3 · Structure.** Does each section answer first, or bury the conclusion under background? Can a reader arriving at an `h2` act without reading upward? Are two sections making the same point? Is anything duplicated that has a canonical home elsewhere?
 
-**4 · Terminology and style.** One term per concept, or synonym rotation? Acronyms expanded once? Spelling per repo, with code identifiers left alone? Condescension ("simply", "just", "obviously")? Ableist metaphor? Gendered assumption where they/them belongs?
+**4 · Terminology and style.** One term per concept, or synonym rotation? Acronyms expanded once? Spelling per repo, with code identifiers left alone? Condescension ("simply", "just", "obviously")? Ableist metaphor? Gendered assumption where they/them belongs? **AI tells** per `references/ai-tells.md`, applying its strength rule (§0) and its when-not-to-act list (§7). Chatbot residue in a published page is **major**; other tells are **minor**. Name patterns, never authorship (§8).
 
 **5 · Mechanics — only what the tools miss.** Run them rather than eyeballing, when they are installed:
 
