@@ -4,10 +4,10 @@ This page is for contributors checking a change before a pull request or a relea
 
 ## Validation
 
-- **Manifest / component validation**: `./scripts/validate.sh` (also run by CI on every PR). The wrapper runs `scripts/validate.py`; if Python 3 is not installed it prints a warning and skips (exit 0) rather than failing; install `python3` for the full local check, or rely on `claude plugin validate .` and CI. CI pins Python so the deep check always runs there.
+- **Manifest / component validation**: `./scripts/validate.sh`, a wrapper around `scripts/validate.py`. Without Python 3 the wrapper prints a warning and exits 0 instead of failing; install `python3` for the full local check, or rely on `claude plugin validate .` and CI. CI installs Python 3 and runs `scripts/validate.py` directly on every pull request and push to `main`, so the full check always runs there.
 - **Official validator**, `claude plugin validate .`: checks the manifest and component structure (no extra dependencies).
 - **Structural review**: run the `plugin-dev:plugin-validator` agent after creating or modifying components.
-- **Skill quality review**: run the `plugin-dev:skill-reviewer` agent, covering description-triggering quality, progressive disclosure, content structure.
+- **Skill quality review**: run the `plugin-dev:skill-reviewer` agent, covering how well each description triggers, progressive disclosure, and content structure.
 - **Token cost**: `claude plugin details docs-editing` shows the inventory and projected token cost. Only the frontmatter `description` of each skill is always-on; keep those lean.
 
 ### What `scripts/validate.py` checks
@@ -19,12 +19,12 @@ Generic, shared with the sibling Cadasto plugins:
 - Every component path a manifest declares exists inside the plugin directory.
 - Kebab-case names for skills, agents, and rules.
 - Hook-config JSON validity, **and** that every hook script it names exists and is executable.
-- Skill / agent / rule frontmatter: required keys, `name` matching the directory or filename stem, and the unquoted-`': '` YAML trap that silently drops all metadata. **Agents must declare `tools:`, never `allowed-tools:`**; flagged as an error.
+- Skill / agent / rule frontmatter: required keys, `name` matching the directory or filename stem, and the unquoted-`': '` YAML trap that silently drops all metadata. **An agent must declare `tools:`; a missing `tools:` key or any `allowed-tools:` key is an error.**
 
-Four invariants specific to this plugin, each guarding a drift class this repo is genuinely exposed to:
+Four invariants specific to this plugin, each guarding a drift class this repo is exposed to:
 
 - **Reference resolution**: every `references/<file>` cited by a skill or agent body exists, and the reference files' own relative links resolve. The bundled `references/` sit at the **plugin root** while a citing skill sits two levels down, so a stale path fails silently at load time and the component improvises rules instead of grounding in them. This is the single most damaging failure mode for a plugin whose value is its cited rules.
-- **Markdown links and anchors**: every *relative* link in every `.md`/`.mdc` file resolves, and every `#anchor` it targets matches a heading in the destination (GitHub slug rules, including the `-1` suffix for duplicate headings). Link syntax inside code fences and inline code spans is skipped, because there it is illustrative rather than a link. External links are deliberately **not** fetched; that needs network and would make the validator flaky; see [versioning.md](versioning.md#coupling-to-external-tooling) for the external drift that stays unmonitored. Internal link rot is exactly the defect this plugin tells other repositories to fix, so it is checked here rather than trusted.
+- **Markdown links and anchors**: every *relative* link in every `.md`/`.mdc` file resolves, and every `#anchor` it targets matches a heading in the destination (GitHub slug rules, including the `-1` suffix for duplicate headings). Link syntax inside code fences and inline code spans is skipped, because there it is illustrative rather than a link. External links are deliberately **not** fetched, because that needs a network and would make the validator flaky; [versioning.md](versioning.md#coupling-to-external-tooling) covers the external drift that stays unmonitored. Internal link rot is exactly the defect this plugin tells other repositories to fix, so it is checked here rather than trusted.
 - **Tool grants**: two advice-vs-capability checks, both added after this repo shipped the defects they catch. A component whose body prescribes a shell command (a shell-tagged fence, or an inline `vale`/`curl` invocation) must declare `Bash`; otherwise the instruction cannot be followed without a permission prompt its sibling components avoid. And an agent must not declare `Write`/`Edit`, nor describe itself as "read-only" while holding a write-capable tool; `Bash` counts, since `sed -i` and `>` write. Agents here are **report-only**: a contract their bodies keep, not a sandbox that keeps it for them, and the docs must not claim otherwise.
 - **Doc sync**: every worker skill and every agent is named both in the `docs-editing` router's body and in `hooks/session-start.sh`. A component that exists but is not routed to is unreachable in practice, and the session-start line is what tells a user it exists.
 
