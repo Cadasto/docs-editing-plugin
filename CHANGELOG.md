@@ -12,10 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Docs: each `docs/` page opens with a paragraph naming its reader and purpose.
 - Docs: `docs/testing.md` adds a `/humanize` smoke test and checks that `/docs-lint-setup` copies the `ai-tells` style.
 - Docs: `docs/versioning.md` adds a release step to update the README version badge.
+- Docs: `README.md` drops the `Status` column from `Components` and folds `The rule that defines it` into `How it decides`.
+- Docs: `README.md` adds `Routing` and `Cursor parity` features, a grounding-sources paragraph, and a `Components` row for `references/vale.ini`.
+- Docs: `README.md` states that both agents hold `Bash` but not `Write` or `Edit`.
 
 ### Fixed
 - Docs: `docs/install.md` no longer lists `go install` as a Vale install route, and names one prose linter instead of two.
 - Docs: `docs/testing.md` says to load a working copy with `--plugin-dir`, not install it.
+- Docs: `README.md` limits the claims-rule feature to the skills that write or edit prose.
+- Docs: `README.md` credits the read-the-repo-first step to the router and Cursor rule, not to every skill.
+- Docs: `docs/install.md` names the Cursor-only rule among host differences and the `_vale.ini` alternative.
+- Docs: `docs/testing.md` says a missing agent `tools:` key is an error too.
+- Docs: `docs/testing.md` says CI runs `scripts/validate.py` directly, not `scripts/validate.sh`.
+- Docs: `docs/authoring.md` lists `ai-tells.md` among the references.
+- Docs: `docs/install.md` calls the prose-lint hook by name instead of "save hook".
 
 ## [0.4.0] - 2026-09-24
 
