@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-01
+
+A docs-only release: the README follows the sibling `go-coding` layout without the `Status` column, each `docs/` page names its reader, and statements that had drifted from the tree are corrected. No component changes.
+
 ### Changed
 - Docs: `README.md` gains a badge row, a requirements paragraph, a table of contents and a `Features` list; `Install` and `Component surface` become `Installation` and `Components`, and the scope section folds into the intro and `How it decides`.
 - Docs: `README.md` links the validator's four plugin-specific invariants in `docs/testing.md` instead of restating them.
